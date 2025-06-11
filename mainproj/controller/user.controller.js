@@ -17,7 +17,7 @@ exports.register = async(req,res,next)=>{
         //Also await waits for the db operation to complete before moving to the next line of code
         //if the db operation fails, it will throw an error and the code will not reach this line
 
-        res.json({status:true,sucess:"User successfully registered"});
+        res.json({status:true,success:"User successfully registered"});
     }
     catch(error){
         throw error;

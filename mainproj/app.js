@@ -1,14 +1,13 @@
-const express = require('express');  //installing express
+const express = require('express');
 const body_parser = require('body-parser');
 const userRouter = require('./routers/user.router');
+const cors = require('cors');
 
+const app = express();      // ✅ create app first!
 
-const app = express();  //Creating instance of it
-
+app.use(cors());            // ✅ now use cors
 app.use(body_parser.json());
-//It parses incoming JSON request to objects which can be accessed in req.body
+//It creates objects from JSON data in the request body and makes them available in req.body.
+app.use('/', userRouter);
 
-
-app.use('/',userRouter);
-
-module.exports = app; //now app will be accessible anywhere in the project
+module.exports = app;
