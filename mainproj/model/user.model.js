@@ -36,5 +36,7 @@ userSchema.pre('save',async function(){
 
 
 const UserModel = db.model('user',userSchema);
+//“Create (or use, if already created) a collection called users in MongoDB.”
+//The first argument is the name of the collection, and the second argument is the schema that defines the structure of the documents in that collection.
 
 module.exports = UserModel;

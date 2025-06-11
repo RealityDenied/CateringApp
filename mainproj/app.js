@@ -6,6 +6,9 @@ const userRouter = require('./routers/user.router');
 const app = express();  //Creating instance of it
 
 app.use(body_parser.json());
+//It parses incoming JSON request to objects which can be accessed in req.body
+
+
 app.use('/',userRouter);
 
 module.exports = app; //now app will be accessible anywhere in the project
