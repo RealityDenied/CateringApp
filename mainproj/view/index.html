@@ -15,6 +15,14 @@
   </form>
   <div id="result"></div>
 
+  <hr>
+  <div>
+    <p>Or login with Google:</p>
+    <a href="http://localhost:3000/auth/google">
+      <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Login with Google" style="height:40px;">
+    </a>
+  </div>
+
   <script>
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -27,9 +35,7 @@
         const response = await fetch('http://localhost:3000/registration', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-          // Uncomment the next line if you need to send credentials (cookies) with the request
-          // credentials: 'include'
+          body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();
@@ -46,5 +52,3 @@
   </script>
 </body>
 </html>
-
-
