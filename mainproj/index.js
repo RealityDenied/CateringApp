@@ -2,7 +2,7 @@ const app = require('./app');  //anything exported in app will get imported in i
 const db = require('./config/db.js');
 const UserModel = require('./model/user.model');
 
-const port = 3000;
+const port = 5000;
 
 require('dotenv').config();
 
@@ -10,11 +10,6 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
-
-
-
-
 
 
 // Load from environment variables
