@@ -1,3 +1,5 @@
+const cors = require('cors');
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,20 +8,35 @@ const chrono = require('chrono-node');
 const Fuse = require('fuse.js');
 const Lead = require('./models/Lead');
 
+const dishRoutes = require('./routes/dishRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+
 const eventTypes = ['Birthday', 'Wedding/Marriage', 'Engagement', 'Corporate Event', 'Others'];
 const fuse = new Fuse(eventTypes, { threshold: 0.4 });
 
+const leadRoutes = require('./routes/leadRoutes');
+
+
+
 const app = express();
+
+
 
 // ✅ Use Express's built-in body parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(cors());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB error:', err));
 
+
+app.use('/api/dishes', dishRoutes);
+app.use('/api/menus', menuRoutes);
+app.use('/api/leads', leadRoutes);
 // ✅ Root route to test server
 app.get('/', (req, res) => {
     res.send('Treat Caterers WhatsApp Bot is running 🚀');

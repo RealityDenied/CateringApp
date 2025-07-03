@@ -1,0 +1,25 @@
+.chatbox {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  background-color: #fafafa;
+  overflow-y: auto;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background-color: #e1ffc7;
+}

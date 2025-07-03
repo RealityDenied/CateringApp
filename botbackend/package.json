@@ -14,6 +14,7 @@
   "dependencies": {
     "body-parser": "^2.2.0",
     "chrono-node": "^2.8.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "fuse.js": "^7.1.0",
