@@ -1,0 +1,23 @@
+.quote-bubble {
+  max-width: 70%;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #e0ffe0;
+}
+
+.quote-bubble.right {
+  margin-left: auto;
+  background: #dbe9ff;
+}
+
+.quote-bubble.left {
+  margin-right: auto;
+  background: #fffbe0;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: #777;
+  margin-top: 6px;
+}

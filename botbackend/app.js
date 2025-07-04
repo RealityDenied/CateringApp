@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { sendBotMessage } = require('./utils/sendMessage');
 const chrono = require('chrono-node');
 const Fuse = require('fuse.js');
-const Lead = require('./models/Lead');
+const Lead = require('./models/lead');
 
 const dishRoutes = require('./routes/dishRoutes');
 const menuRoutes = require('./routes/menuRoutes');
@@ -15,6 +15,10 @@ const eventTypes = ['Birthday', 'Wedding/Marriage', 'Engagement', 'Corporate Eve
 const fuse = new Fuse(eventTypes, { threshold: 0.4 });
 
 const leadRoutes = require('./routes/leadRoutes');
+
+const quoteRoutes = require('./routes/quoteRoutes');
+
+const whatsappbotRoutes = require('./routes/whatsappbotRoutes');
 
 
 
@@ -37,6 +41,9 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/dishes', dishRoutes);
 app.use('/api/menus', menuRoutes);
 app.use('/api/leads', leadRoutes);
+app.use('/api/quotes', quoteRoutes);
+app.use('/whatsappbot', whatsappbotRoutes);
+
 // ✅ Root route to test server
 app.get('/', (req, res) => {
     res.send('Treat Caterers WhatsApp Bot is running 🚀');

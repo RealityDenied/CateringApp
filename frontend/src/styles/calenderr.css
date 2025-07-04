@@ -1,0 +1,71 @@
+.event-calendar {
+    background: #5fc488;
+    border-radius: 2rem;
+    padding: 1rem;
+    width: 270px;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+    box-shadow: 0 2px 8px #0002;
+  }
+  .ec-header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .ec-days-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+  }
+  .ec-day {
+    width: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    background: #fff;
+    border-radius: 1rem;
+    margin: 0 1px;
+    font-weight: 500;
+  }
+  .ec-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .ec-cell {
+    width: 2rem;
+    height: 2rem;
+    background: #f7f7f7;
+    border-radius: 0.7rem;
+    margin: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+  }
+  .ec-date {
+    font-size: 0.95rem;
+    margin-top: 2px;
+  }
+  .ec-dots {
+    display: flex;
+    gap: 2px;
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .ec-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .ec-dot.lead {
+    background: #ffd600;
+    border: 1px solid #bfa800;
+  }
+  .ec-dot.converted {
+    background: #00c853;
+    border: 1px solid #007d32;
+  }
