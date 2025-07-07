@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Tier = require('../models/Tier');
+const Dish = require('../models/dish');
+
 
 // 🔐 Optional middleware
 // const { verifyChef } = require('../middleware/auth');
@@ -10,6 +12,11 @@ const Tier = require('../models/Tier');
 router.get('/', async (req, res) => {
   const tiers = await Tier.find().populate('categories.dishIds');
   res.json(tiers);
+});
+
+router.get('/categories', async (req, res) => {
+  const categories = await Dish.distinct('category');
+  res.json(categories);
 });
 
 // Create a new tier
