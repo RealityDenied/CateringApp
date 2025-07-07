@@ -1,0 +1,21 @@
+.tier-viewer {
+  width: 50%;
+}
+
+.create-tier input {
+  margin-right: 10px;
+  padding: 4px;
+}
+
+.create-tier button {
+  padding: 5px 10px;
+  margin-top: 8px;
+}
+
+.tier-block {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  padding: 10px;
+  background: #eef;
+  min-height: 100px;
+}

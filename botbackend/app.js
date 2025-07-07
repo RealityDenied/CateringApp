@@ -11,6 +11,12 @@ const Lead = require('./models/lead');
 const dishRoutes = require('./routes/dishRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 
+const dishnewRoutes = require('./routes/dishnewRoutes');
+const tierRoutes = require('./routes/tierRoutes');
+
+
+
+
 const eventTypes = ['Birthday', 'Wedding/Marriage', 'Engagement', 'Corporate Event', 'Others'];
 const fuse = new Fuse(eventTypes, { threshold: 0.4 });
 
@@ -43,6 +49,9 @@ app.use('/api/menus', menuRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/whatsappbot', whatsappbotRoutes);
+
+app.use('/api/dishes', dishnewRoutes);
+app.use('/api/tiers', tierRoutes);
 
 // ✅ Root route to test server
 app.get('/', (req, res) => {
