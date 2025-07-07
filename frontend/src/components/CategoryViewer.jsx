@@ -3,63 +3,88 @@ import { API } from '../utils/api';
 import '../styles/CategoryViewer.css';
 
 const CategoryViewer = ({ onCategoryDragStart }) => {
-  const [dishes, setDishes] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [newDish, setNewDish] = useState({ name: '', category: '' });
+  const [dishes, setDishes] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newDish, setNewDish] = useState({});
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const [dishRes, categoryRes] = await Promise.all([
-      API.get('/dishes'),
-      API.get('/dishes/categories'),
+    const [catRes, dishRes] = await Promise.all([
+      API.get('/categories'),
+      API.get('/dishes')
     ]);
+    setCategories(catRes.data);
     setDishes(dishRes.data);
-    setCategories(categoryRes.data);
   };
 
-  const handleAddDish = async () => {
-    if (!newDish.name || !newDish.category) return;
-    const res = await API.post('/dishes', newDish);
-    setDishes(prev => [...prev, res.data]);
-    if (!categories.includes(res.data.category)) {
-      setCategories(prev => [...prev, res.data.category]);
-    }
-    setNewDish({ name: '', category: '' });
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    await API.post('/categories', { name: newCategoryName.trim() });
+    setNewCategoryName('');
+    fetchData();
+  };
+
+  const handleAddDish = async (category) => {
+    const data = newDish[category];
+    if (!data || !data.name) return;
+
+    await API.post('/dishes', {
+      name: data.name,
+      description: data.description || '',
+      category,
+    });
+
+    setNewDish(prev => ({ ...prev, [category]: { name: '', description: '' } }));
+    fetchData();
   };
 
   return (
     <div className="category-viewer">
       <h2>Category Viewer</h2>
-      <div className="add-dish">
+
+      <div className="category-create">
         <input
           type="text"
-          placeholder="Dish name"
-          value={newDish.name}
-          onChange={e => setNewDish({ ...newDish, name: e.target.value })}
+          value={newCategoryName}
+          onChange={e => setNewCategoryName(e.target.value)}
+          placeholder="New category name"
         />
-        <input
-          type="text"
-          placeholder="Category"
-          value={newDish.category}
-          onChange={e => setNewDish({ ...newDish, category: e.target.value })}
-        />
-        <button onClick={handleAddDish}>Add Dish</button>
+        <button onClick={handleAddCategory}>Create Category</button>
       </div>
+
       <div className="category-list">
-        {categories.map(category => (
+        {categories.map(cat => (
           <div
+            key={cat._id}
             className="category-block"
-            key={category}
             draggable
-            onDragStart={() => onCategoryDragStart(category)}
+            onDragStart={() => onCategoryDragStart(cat.name)}
           >
-            <h4>{category}</h4>
+            <h3>{cat.name}</h3>
+
+            <div className="dish-inputs">
+              <input
+                type="text"
+                placeholder="Dish name"
+                value={newDish[cat.name]?.name || ''}
+                onChange={e =>
+                  setNewDish(prev => ({
+                    ...prev,
+                    [cat.name]: { ...prev[cat.name], name: e.target.value }
+                  }))
+                }
+              />
+              
+              <button onClick={() => handleAddDish(cat.name)}>Add Dish</button>
+            </div>
+
             <ul>
               {dishes
-                .filter(d => d.category === category)
+                .filter(d => d.category === cat.name)
                 .map(d => (
                   <li key={d._id}>{d.name}</li>
                 ))}

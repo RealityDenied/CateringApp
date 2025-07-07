@@ -1,4 +1,3 @@
-// ChatWindow.jsx
 import { useEffect, useState } from 'react';
 import ChatProfile from './ChatProfile';
 import QuoteBubble from '../components/QuoteBubble';
@@ -7,23 +6,8 @@ import '../styles/chatwindow.css';
 
 function ChatWindow() {
   const { selectedLead } = useSelectedLead();
-  const [quote, setQuote] = useState(null);
 
-  useEffect(() => {
-    if (!selectedLead?._id) return;
-
-    const fetchQuote = async () => {
-      try {
-        const res = await fetch(`http://localhost:3000/api/quotes/${selectedLead._id}`);
-        const data = await res.json();
-        setQuote(data);
-      } catch (err) {
-        console.error('Failed to fetch quote:', err);
-      }
-    };
-
-    fetchQuote();
-  }, [selectedLead]);
+  const quote = selectedLead?.quote; // ✅ lead.quote is already populated
 
   return (
     <div className="chat-box">

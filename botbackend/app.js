@@ -26,6 +26,13 @@ const quoteRoutes = require('./routes/quoteRoutes');
 
 const whatsappbotRoutes = require('./routes/whatsappbotRoutes');
 
+const categoryRoutes = require('./routes/categoryRoutes');
+
+const quoteRoutesNew = require('./routes/quoteRoutesNew');
+
+
+
+
 
 
 const app = express();
@@ -53,6 +60,9 @@ app.use('/whatsappbot', whatsappbotRoutes);
 //working routes latest from here
 app.use('/api/dishes', dishnewRoutes);
 app.use('/api/tiers', tierRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/quotesNew', quoteRoutesNew);
+
 
 // ✅ Root route to test server
 app.get('/', (req, res) => {

@@ -8,7 +8,7 @@ const leadSchema = new mongoose.Schema({
     eventDate: Date, // parsed full datetime with chrono
     numberOfGuests: Number,
     location: String,
-    quote: { type: mongoose.Schema.Types.ObjectId, ref: 'Quote' },
+    quote: { type: mongoose.Schema.Types.ObjectId, ref: 'QuoteNew' },
     createdAt: { type: Date, default: Date.now }
 });
 
