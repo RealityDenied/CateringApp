@@ -10,79 +10,75 @@ const QuoteSession = () => {
   const [selectedTier, setSelectedTier] = useState(null);
   const [selectedDishes, setSelectedDishes] = useState({});
 
-  // Fetch lead and tiers
+  // — Fetch lead & tiers once token arrives
   useEffect(() => {
     if (!token) return;
 
-    API.get(`/leads/by-token/${token}`).then(res => {
-      setLead(res.data);
-    });
+    const load = async () => {
+      try {
+        const [leadRes, tierRes] = await Promise.all([
+          API.get(`/leads/by-token/${token}`),
+          API.get('/tiers'),
+        ]);
 
-    API.get('/tiers').then(res => {
-      setTiers(res.data);
-    });
+        setLead(leadRes.data);
+        setTiers(tierRes.data);
+
+        // if this lead already has a quote, pre-select its tier
+        const pre = leadRes.data.quote?.tierId?._id;
+        if (pre) setSelectedTierId(pre);
+
+      } catch (err) {
+        console.error('Error loading session:', err);
+        alert('Could not load your session. Please try again.');
+      }
+    };
+
+    load();
   }, [token]);
 
-  // When user selects tier
-//   useEffect(() => {
-//     if (selectedTierId && tiers.length > 0) {
-//       const tier = tiers.find(t => t._id === selectedTierId);
-//       setSelectedTier(tier);
-
-//       const initial = {};
-//       tier.categories.forEach(c => {
-//         initial[c.category] = [];
-//       });
-//       setSelectedDishes(initial);
-//     }
-//   }, [selectedTierId, tiers]);
-
-
-
-  //new useeffect to handle lead selection
+  // — Whenever the tier choice changes, pick that tier object & reset selections
   useEffect(() => {
-  if (!token) return;
+    if (!selectedTierId) {
+      setSelectedTier(null);
+      setSelectedDishes({});
+      return;
+    }
 
-  API.get(`/leads/by-token/${token}`)
-    .then(res => {
-      console.log('📦 Lead loaded:', res.data);
-      setLead(res.data);
-    })
-    .catch(err => {
-      console.error('❌ Error fetching lead:', err);
-      alert('Could not load lead. Please try again.');
+    const tier = tiers.find(t => t._id === selectedTierId);
+    setSelectedTier(tier);
+
+    // initialize the checkboxes
+    const initial = {};
+    tier.categories.forEach(c => {
+      // if there's an existing quote, load those; else empty
+      const prev = lead?.quote?.selectedDishes?.find(x => x.category === c.category);
+      initial[c.category] = prev
+        ? prev.dishIds.map(d => (typeof d === 'string' ? d : d._id))
+        : [];
     });
-
-  API.get('/tiers')
-    .then(res => setTiers(res.data))
-    .catch(err => {
-      console.error('❌ Error fetching tiers:', err);
-    });
-}, [token]);
-//till here
-
+    setSelectedDishes(initial);
+  }, [selectedTierId, tiers, lead]);
 
   const handleCheckbox = (category, dishId) => {
     const current = selectedDishes[category] || [];
     const isChecked = current.includes(dishId);
-    const max = selectedTier.categories.find(c => c.category === category)?.maxSelectable || Infinity;
+    const limit = selectedTier.categories.find(c => c.category === category)?.maxSelectable || Infinity;
 
-    if (!isChecked && current.length >= max) return;
-
-    const updated = isChecked
-      ? current.filter(id => id !== dishId)
-      : [...current, dishId];
+    if (!isChecked && current.length >= limit) return;
 
     setSelectedDishes(prev => ({
       ...prev,
-      [category]: updated
+      [category]: isChecked
+        ? prev[category].filter(id => id !== dishId)
+        : [...prev[category], dishId]
     }));
   };
 
   const handleSubmit = async () => {
-    const formatted = Object.keys(selectedDishes).map(cat => ({
+    const formatted = Object.entries(selectedDishes).map(([cat, ids]) => ({
       category: cat,
-      dishIds: selectedDishes[cat]
+      dishIds: ids
     }));
 
     try {
@@ -91,19 +87,15 @@ const QuoteSession = () => {
         selectedDishes: formatted,
         updatedBy: 'lead'
       });
-
-      const quoteId = res.data._id;
-
-      await API.patch(`/leads/${lead._id}/attach-quote`, { quoteId });
-
+      await API.patch(`/leads/${lead._id}/attach-quote`, { quoteId: res.data._id });
       alert('✅ Your menu selection has been saved!');
     } catch (err) {
-      console.error(err);
-      alert('❌ Failed to save your selection. Please try again.');
+      console.error('Submit error:', err);
+      alert('❌ Failed to save. Please try again.');
     }
   };
 
-  if (!lead) return <div>Loading lead info...</div>;
+  if (!lead) return <div>Loading your session…</div>;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -126,7 +118,10 @@ const QuoteSession = () => {
       {selectedTier && (
         <div style={{ marginTop: '20px' }}>
           {selectedTier.categories.map(cat => (
-            <div key={cat.category} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '15px' }}>
+            <div
+              key={cat.category}
+              style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '15px' }}
+            >
               <h4>{cat.category} (max {cat.maxSelectable})</h4>
               {cat.dishIds.map(dish => (
                 <label key={dish._id} style={{ display: 'block' }}>
