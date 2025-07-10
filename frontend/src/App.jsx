@@ -6,6 +6,12 @@ import { SelectedLeadProvider } from './context/SelectedLeadContext';
 import MenuModule from './pages/menumodule';
 
 import QuoteEditor from './pages/QuoteEditor';
+import QuoteSession from './pages/QuoteSession';
+
+
+
+
+
 
 
 
@@ -19,6 +25,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/menumodule" element={<MenuModule />} />
         <Route path="/quote" element={<QuoteEditor />} />
+        <Route path="/quote-editor/:token" element={<QuoteSession />} />
         </Routes>
       </SelectedLeadProvider>
     </BrowserRouter>

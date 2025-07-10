@@ -40,5 +40,26 @@ router.patch('/:id/attach-quote', async (req, res) => {
   }
 });
 
+// GET /api/leads/by-token/:token
+router.get('/by-token/:token', async (req, res) => {
+  try {
+    const lead = await Lead.findOne({ sessionToken: req.params.token })
+      .populate({
+        path: 'quote',
+        populate: [
+          { path: 'tierId' },
+          { path: 'selectedDishes.dishIds' }
+        ]
+      });
+
+    if (!lead) return res.status(404).json({ error: 'Invalid token' });
+    res.json(lead);
+  } catch (error) {
+    console.error('Error fetching lead by token:', error);
+    res.status(500).json({ error: 'Failed to fetch lead by token' });
+  }
+});
+
+
 
 module.exports = router;

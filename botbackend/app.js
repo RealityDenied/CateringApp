@@ -63,6 +63,11 @@ app.use('/api/tiers', tierRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotesNew', quoteRoutesNew);
 
+app.get('/api', (req, res) => {
+  res.send('✅ API root reached.');
+});
+
+
 
 // ✅ Root route to test server
 app.get('/', (req, res) => {
