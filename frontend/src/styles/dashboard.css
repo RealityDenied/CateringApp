@@ -48,7 +48,7 @@ body, html {
 }
 
 /* === Panels === */
-.inbox,
+
 .chatbox,
 .eventbox {
   background-color: #ffffff;
@@ -59,12 +59,15 @@ body, html {
 }
 
 .inbox {
-  width:30%;
+  width:35%;
   height: 100%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .chatbox {
-  width: 70%;
+  width: 75%;
   height: 100%;
 }
 
@@ -76,44 +79,309 @@ body, html {
     from here inbox component css
 */
 
+/* === Main Container === */
 .inbox-inside {
-  
-  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   border-radius: 12px;
-  background-color: #fff;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter Sans', sans-serif; /* Apply Inter Sans globally */
+}
+
+/* === Header (20%) === */
+.inbox-header {
+  height: 20%;
+  background-color: #00A68A;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+/* === Body (80%) === */
+.inbox-body {
+  height: 80%;
   overflow-y: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  display:flex;
+  display: flex;
   flex-direction: column;
 }
 
+/* === Inbox Item === */
 .inbox-item {
-  padding: 10px 12px;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  height: 76px;
+  border-radius: 10px;
+  background-color: #F9F9F9;
   cursor: pointer;
   transition: background 0.2s ease;
-  border-radius: 8px;
+  align-items: stretch;
+  font-family: 'Inter Sans', sans-serif;
 }
 
 .inbox-item:hover {
-  background-color: #f3f3f3;
+  background-color: #f0f0f0;
+}
+
+/* === Left Side: Initial Circle === */
+.left-inbox-item {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: #e4e4e4;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+/* === Right Side === */
+.right-inbox-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* === Top Row: Name + Status + Time === */
+.up-inbox-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inbox-name-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .lead-name {
-  font-weight: bold;
   font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  font-family: 'Inter', sans-serif;
 }
 
-.lead-event {
-  font-size: 14px;
-  color: #555;
-}
-
-.lead-date {
+.lead-status {
+  padding: 2px 10px;
+  border-radius: 6px;
   font-size: 13px;
-  color: #999;
+  font-weight: 500;
+  font-family: 'Inter Sans', sans-serif;
 }
 
-/* 
-    till here inbox component css
-*/
+.lead-status.pending {
+  background-color: #FEEFAD;
+  color: #7a6001;
+}
+
+.lead-status.confirmed {
+  background-color: #DFF6ED;
+  color: #157A5F;
+}
+
+.lead-status.expired {
+  background-color: #f7d9d9;
+  color: #891e1e;
+}
+
+.lead-days {
+  font-size: 14px;
+  color: #444;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+/* === Bottom Row: Event Info (One Line) === */
+.down-inbox-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #555;
+  overflow: hidden;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+
+
+.event-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  
+}
+
+
+
+
+.event-type {
+  font-weight: 500;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.event-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: black;
+  font-weight: 400;
+  padding-left: 6px;
+  border-left: 1px solid #aaa;
+  white-space: nowrap;
+}
+
+.event-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: black;
+  font-weight: 500;
+  padding-left: 6px;
+  border-left: 1px solid #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === From here header of inbox  === */
+
+.inbox-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  background-color: #1BAA96;
+  color: white;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+/* Row 1: INBOX title + search */
+.inbox-header-top {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.inbox-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.inbox-search {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+  gap: 4px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-family: 'Inter Sans', sans-serif;
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Row 2: Status Filters */
+.inbox-header-middle {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  color: #1BAA96;
+}
+
+.status-filter {
+  background: white;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: #1BAA96;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.status-filter.active {
+  background-color: #e5f5f2;
+  color: #1BAA96;
+  font-weight: 600;
+}
+
+/* Row 3: Sort and event icons */
+.inbox-header-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  color: #1BAA96;
+}
+
+.inbox-header-bottom::-webkit-scrollbar {
+  display: none;
+}
+
+.sort-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: white;
+}
+
+.sort-button {
+  background: white;
+  border: none;
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 10px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  color: #1BAA96;
+}
+
+/* Push first icon to right edge */
+.event-type-icon:first-of-type {
+  margin-left: auto;
+}
+
+.event-type-icon {
+  background: white;
+  border: none;
+  padding: 5px;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.event-type-icon img {
+  width: 16px;
+  height: 16px;
+}
