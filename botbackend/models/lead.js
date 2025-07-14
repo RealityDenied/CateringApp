@@ -1,6 +1,6 @@
 // botbackend/models/lead.js
 const mongoose = require('mongoose');
-const crypto = require('crypto'); // Add this if you want to generate token server-side
+const crypto = require('crypto'); // generate token server-side
 
 const leadSchema = new mongoose.Schema({
     phone: { type: String, required: true },
@@ -12,7 +12,7 @@ const leadSchema = new mongoose.Schema({
     location: String,
     quote: { type: mongoose.Schema.Types.ObjectId, ref: 'QuoteNew' },
 
-    sessionToken: { type: String, unique: true }, // ✅ New field
+    sessionToken: { type: String, unique: true }, // New field
 
     createdAt: { type: Date, default: Date.now }
 });

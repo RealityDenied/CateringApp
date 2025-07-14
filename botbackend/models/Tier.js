@@ -9,7 +9,7 @@ const categoryConfigSchema = new mongoose.Schema({
 const tierSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
-  pricePerPlate: { type: Number, default: 0 }, // 🆕 per plate cost
+  pricePerPlate: { type: Number, default: 0 }, // per plate cost
   categories: [categoryConfigSchema]
 });
 

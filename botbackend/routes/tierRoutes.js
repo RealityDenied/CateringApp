@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Tier = require('../models/Tier');
 
-// 🔐 Optional middleware
+// Optional middleware
 // const { verifyChef } = require('../middleware/auth');
 // router.use(verifyChef);
 
