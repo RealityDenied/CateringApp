@@ -1,39 +1,108 @@
 .chat-profile {
-  width:100%;
-  flex: 0 0 auto;
+  width: 100%;
+  height: 90px;
+  background-color: #16a39f;
+  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #ddd;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-sizing: border-box;
 }
 
-.chat-profile-left {
+/* === LEFT SIDE === */
+.event-core-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: white;
+}
+
+.left-event-core-info {
+  display: flex;
+  align-items: center;
+}
+
+.event-avatar {
+  width: 60px;
+  height: 60px;
+  background-color: #eee;
+  color: #111;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.right-event-core-info {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.profile-name {
-  font-weight: bold;
-  font-size: 18px;
+.event-name-profile {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
 }
 
-.profile-lastmsg {
+.event-details-profile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-tag {
+  background-color: #b6e2dd;
+  color: black;
+  padding: 3px 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* === RIGHT SIDE === */
+.event-core-info2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.meta-box {
+  background-color: #ddd;
+  color: #000;
+  padding: 6px 10px;
+  border-radius: 10px;
   font-size: 14px;
-  color: #555;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 5px;
+  text-align: center;
 }
 
-.chat-profile-right {
-  text-align: right;
+.calendar-box {
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px;
+}
+
+.meta-sub {
+  font-size: 12px;
+  color: #444;
+  margin-top: -4px;
+}
+
+.updownstack {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 14px;
-  color: #333;
-}
-
-.chat-profile-right span {
-  white-space: nowrap;
 }
