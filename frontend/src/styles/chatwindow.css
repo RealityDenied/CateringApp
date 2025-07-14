@@ -1,4 +1,5 @@
 /* Outer container for the chat */
+
 .chat-box {
   width: 100%;
   height: 100%;
@@ -25,7 +26,7 @@
   min-width: 0;
   overflow-y: auto;
   background-color: #fafafa;
-  padding: 20px;
+  
   display: flex;
   flex-direction: column;
 }
