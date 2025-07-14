@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Lead = require('../models/lead');
 
+// GET /api/leads
 router.get('/', async (req, res) => {
   try {
     const leads = await Lead.find()
@@ -9,7 +10,8 @@ router.get('/', async (req, res) => {
         path: 'quote',
         populate: [
           { path: 'tierId' },
-          { path: 'selectedDishes.dishIds' }
+          { path: 'selectedDishes.dishIds' },
+          { path: 'selectedAddOns.dishId' } // ✅ FIXED
         ]
       })
       .sort({ createdAt: -1 });
@@ -48,7 +50,8 @@ router.get('/by-token/:token', async (req, res) => {
         path: 'quote',
         populate: [
           { path: 'tierId' },
-          { path: 'selectedDishes.dishIds' }
+          { path: 'selectedDishes.dishIds' },
+          { path: 'selectedAddOns.dishId' } // ✅ FIXED
         ]
       });
 
@@ -59,7 +62,5 @@ router.get('/by-token/:token', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch lead by token' });
   }
 });
-
-
 
 module.exports = router;

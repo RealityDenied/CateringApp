@@ -10,11 +10,11 @@ router.get('/', async (req, res) => {
 
 // Create a new category
 router.post('/', async (req, res) => {
-  const { name } = req.body;
+  const { name, isFlexible = false } = req.body;
   if (!name) return res.status(400).json({ error: 'Category name is required' });
 
   try {
-    const category = new Category({ name });
+    const category = new Category({ name, isFlexible });
     await category.save();
     res.status(201).json(category);
   } catch (err) {

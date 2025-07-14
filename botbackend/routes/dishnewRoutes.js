@@ -3,17 +3,13 @@ const router = express.Router();
 const Tier = require('../models/Tier');
 const Dish = require('../models/dish');
 
-
-// 🔐 Optional middleware
-// const { verifyChef } = require('../middleware/auth');
-// router.use(verifyChef);
-
 // Get all tiers
 router.get('/', async (req, res) => {
   const tiers = await Tier.find().populate('categories.dishIds');
   res.json(tiers);
 });
 
+// Get all distinct categories from dishes
 router.get('/categories', async (req, res) => {
   const categories = await Dish.distinct('category');
   res.json(categories);
@@ -21,8 +17,8 @@ router.get('/categories', async (req, res) => {
 
 // Create a new tier
 router.post('/', async (req, res) => {
-  const { name, description } = req.body;
-  const tier = new Tier({ name, description, categories: [] });
+  const { name, description, pricePerPlate = 0 } = req.body;
+  const tier = new Tier({ name, description, pricePerPlate, categories: [] });
   await tier.save();
   res.status(201).json(tier);
 });
@@ -34,7 +30,7 @@ router.put('/:id/categories', async (req, res) => {
 
   const index = tier.categories.findIndex(c => c.category === category);
   if (index !== -1) {
-    // Update
+    // Update existing
     tier.categories[index] = { category, maxSelectable, dishIds };
   } else {
     // Add new

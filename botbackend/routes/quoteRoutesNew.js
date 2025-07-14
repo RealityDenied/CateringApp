@@ -4,19 +4,20 @@ const Quote = require('../models/QuoteModel');
 
 // Create a new quote
 router.post('/', async (req, res) => {
-  const { tierId, selectedDishes, updatedBy } = req.body;
-  const quote = new Quote({ tierId, selectedDishes, updatedBy });
+  const { tierId, selectedDishes, selectedAddOns = [], updatedBy } = req.body;
+  const quote = new Quote({ tierId, selectedDishes, selectedAddOns, updatedBy });
   await quote.save();
   res.status(201).json(quote);
 });
 
 // Update a quote
 router.put('/:id', async (req, res) => {
-  const { selectedDishes, updatedBy } = req.body;
+  const { selectedDishes, selectedAddOns = [], updatedBy } = req.body;
   const quote = await Quote.findByIdAndUpdate(
     req.params.id,
     {
       selectedDishes,
+      selectedAddOns,
       updatedBy,
       updatedAt: new Date()
     },
@@ -29,8 +30,11 @@ router.put('/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const quote = await Quote.findById(req.params.id)
     .populate('tierId')
-    .populate('selectedDishes.dishIds');
+    .populate('selectedDishes.dishIds')
+    .populate('selectedAddOns.dishId');
   res.json(quote);
 });
+
+
 
 module.exports = router;

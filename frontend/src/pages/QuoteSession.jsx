@@ -9,8 +9,8 @@ const QuoteSession = () => {
   const [selectedTierId, setSelectedTierId] = useState('');
   const [selectedTier, setSelectedTier] = useState(null);
   const [selectedDishes, setSelectedDishes] = useState({});
+  const [selectedAddOns, setSelectedAddOns] = useState([]);
 
-  // — Fetch lead & tiers once token arrives
   useEffect(() => {
     if (!token) return;
 
@@ -24,10 +24,8 @@ const QuoteSession = () => {
         setLead(leadRes.data);
         setTiers(tierRes.data);
 
-        // if this lead already has a quote, pre-select its tier
         const pre = leadRes.data.quote?.tierId?._id;
         if (pre) setSelectedTierId(pre);
-
       } catch (err) {
         console.error('Error loading session:', err);
         alert('Could not load your session. Please try again.');
@@ -37,27 +35,28 @@ const QuoteSession = () => {
     load();
   }, [token]);
 
-  // — Whenever the tier choice changes, pick that tier object & reset selections
   useEffect(() => {
     if (!selectedTierId) {
       setSelectedTier(null);
       setSelectedDishes({});
+      setSelectedAddOns([]);
       return;
     }
 
     const tier = tiers.find(t => t._id === selectedTierId);
     setSelectedTier(tier);
 
-    // initialize the checkboxes
     const initial = {};
     tier.categories.forEach(c => {
-      // if there's an existing quote, load those; else empty
       const prev = lead?.quote?.selectedDishes?.find(x => x.category === c.category);
       initial[c.category] = prev
         ? prev.dishIds.map(d => (typeof d === 'string' ? d : d._id))
         : [];
     });
     setSelectedDishes(initial);
+
+    const prevAddOns = lead?.quote?.selectedAddOns || [];
+    setSelectedAddOns(prevAddOns);
   }, [selectedTierId, tiers, lead]);
 
   const handleCheckbox = (category, dishId) => {
@@ -75,6 +74,35 @@ const QuoteSession = () => {
     }));
   };
 
+  const handleAddOnToggle = (dish) => {
+    const exists = selectedAddOns.find(d => d.dishId === dish._id);
+    if (exists) {
+      setSelectedAddOns(prev => prev.filter(d => d.dishId !== dish._id));
+    } else {
+      setSelectedAddOns(prev => [...prev, { dishId: dish._id, unit: dish.unit }]);
+    }
+  };
+
+  const calculateTotal = () => {
+    if (!selectedTier) return 0;
+    const guests = lead?.numberOfGuests || 0;
+    let base = selectedTier.pricePerPlate * guests;
+
+    for (const item of selectedAddOns) {
+      const dish = selectedTier.categories
+        .flatMap(c => c.dishIds)
+        .find(d => d._id === item.dishId);
+      if (!dish) continue;
+      if (item.unit === 'per guest') {
+        base += dish.price * guests;
+      } else {
+        base += dish.price;
+      }
+    }
+
+    return base;
+  };
+
   const handleSubmit = async () => {
     const formatted = Object.entries(selectedDishes).map(([cat, ids]) => ({
       category: cat,
@@ -85,6 +113,7 @@ const QuoteSession = () => {
       const res = await API.post('/quotesNew', {
         tierId: selectedTierId,
         selectedDishes: formatted,
+        selectedAddOns,
         updatedBy: 'lead'
       });
       await API.patch(`/leads/${lead._id}/attach-quote`, { quoteId: res.data._id });
@@ -122,19 +151,29 @@ const QuoteSession = () => {
               key={cat.category}
               style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '15px' }}
             >
-              <h4>{cat.category} (max {cat.maxSelectable})</h4>
+              <h4>{cat.category} {cat.maxSelectable ? `(max ${cat.maxSelectable})` : '(Flexible Add-ons)'}</h4>
               {cat.dishIds.map(dish => (
                 <label key={dish._id} style={{ display: 'block' }}>
                   <input
                     type="checkbox"
-                    checked={selectedDishes[cat.category]?.includes(dish._id) || false}
-                    onChange={() => handleCheckbox(cat.category, dish._id)}
+                    checked={
+                      cat.maxSelectable
+                        ? selectedDishes[cat.category]?.includes(dish._id)
+                        : selectedAddOns.some(d => d.dishId === dish._id)
+                    }
+                    onChange={() =>
+                      cat.maxSelectable
+                        ? handleCheckbox(cat.category, dish._id)
+                        : handleAddOnToggle(dish)
+                    }
                   />
                   {dish.name}
+                  {!cat.maxSelectable && ` — ₹${dish.price} (${dish.unit})`}
                 </label>
               ))}
             </div>
           ))}
+          <p><strong>Total Price:</strong> ₹{calculateTotal()}</p>
           <button onClick={handleSubmit}>Submit My Selection</button>
         </div>
       )}
