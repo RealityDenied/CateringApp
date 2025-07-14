@@ -14,6 +14,7 @@
   padding: 20px;
   background-color: #fafafa;
   overflow-y: auto;
+  width:50%;
 }
 
 .chat-message {
@@ -22,4 +23,11 @@
   padding: 10px 14px;
   border-radius: 10px;
   background-color: #e1ffc7;
+}
+real-chat-messages{
+  width:50%;
+  flex: 1;
+  padding: 20px;
+  background-color: #fafafa;
+  overflow-y: auto;
 }

@@ -21,6 +21,7 @@ function ChatWindow() {
           </p>
         )}
       </div>
+      <div className="real-chat-messages"></div>
     </div>
   );
 }
