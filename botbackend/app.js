@@ -14,6 +14,10 @@ const menuRoutes = require('./routes/menuRoutes');
 const dishnewRoutes = require('./routes/dishnewRoutes');
 const tierRoutes = require('./routes/tierRoutes');
 
+const messageRoutes = require('./routes/messageRoutes');
+
+
+
 
 
 
@@ -62,6 +66,8 @@ app.use('/api/dishes', dishnewRoutes);
 app.use('/api/tiers', tierRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotesNew', quoteRoutesNew);
+
+app.use('/api/messages', messageRoutes);
 
 app.get('/api', (req, res) => {
   res.send('✅ API root reached.');

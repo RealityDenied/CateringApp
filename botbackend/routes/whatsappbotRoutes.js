@@ -3,9 +3,12 @@ const router = express.Router();
 require('dotenv').config();
 
 const crypto = require('crypto');
-const Lead = require('../models/lead');
+const chrono = require('chrono-node');
+const Fuse = require('fuse.js');
 
-const { sendReply } = require('../utils/metaSend'); // your util function to send messages
+const Lead = require('../models/lead');
+const Message = require('../models/Message');
+const { sendReply } = require('../utils/metaSend');
 
 // GET: Webhook verification
 router.get('/', (req, res) => {
@@ -23,33 +26,7 @@ router.get('/', (req, res) => {
   }
 });
 
-// ✅ POST: Incoming messages from Meta
-// router.post('/', async (req, res) => {
-//   const entry = req.body.entry?.[0];
-//   const changes = entry?.changes?.[0];
-//   const messages = changes?.value?.messages;
-
-//   if (messages && messages.length > 0) {
-//     const msg = messages[0];
-//     const from = msg.from; // WhatsApp phone number
-//     const text = msg.text?.body;
-
-//     console.log(`Received message from ${from}: ${text}`);
-
-//     if (text?.toLowerCase() === 'hi') {
-//       await sendReply(from, 'Hi there! 👋 This is Treat Caterers. How can we help you?');
-//     }
-//     if (text?.toLowerCase() === 'thanks') {
-//       await sendReply(from, 'You\'re welcome! If you have any more questions, feel free to ask.');
-//     }
-//   }
-
-//   res.sendStatus(200);
-// });
-
-
-
-
+// POST: Incoming WhatsApp message handler
 router.post('/', async (req, res) => {
   const entry = req.body.entry?.[0];
   const changes = entry?.changes?.[0];
@@ -58,15 +35,27 @@ router.post('/', async (req, res) => {
   if (messages && messages.length > 0) {
     const msg = messages[0];
     const from = msg.from;
-    const text = msg.text?.body?.toLowerCase();
+    const text = msg.text?.body;
 
     console.log(`Received message from ${from}: ${text}`);
 
-    if (text === 'hi') {
+    // 1. Save incoming message (if lead exists)
+    const lead = await Lead.findOne({ phone: from });
+    if (lead && text) {
+      await Message.create({
+        leadId: lead._id,
+        sender: 'lead',
+        text
+      });
+    }
+
+    // 2. Respond to "hi"
+    if (text?.toLowerCase() === 'hi') {
       await sendReply(from, 'Hi there! 👋 This is Treat Caterers. Please send your event details:\n\nName:\nContact Number:\nEvent Type:\nEvent Date:\nEvent Time:\nNumber of Guests:\nLocation:');
     }
 
-    if (text?.includes('name:') && text?.includes('contact number:')) {
+    // 3. Event detail form parsing
+    if (text?.toLowerCase().includes('name:') && text?.toLowerCase().includes('contact number:')) {
       const lines = msg.text.body.split('\n').map(l => l.trim());
       const data = {};
       lines.forEach(line => {
@@ -76,8 +65,6 @@ router.post('/', async (req, res) => {
         }
       });
 
-      const chrono = require('chrono-node');
-      const Fuse = require('fuse.js');
       const eventTypes = ['Birthday', 'Wedding/Marriage', 'Engagement', 'Corporate Event', 'Others'];
       const fuse = new Fuse(eventTypes, { threshold: 0.4 });
 
@@ -113,6 +100,5 @@ router.post('/', async (req, res) => {
 
   res.sendStatus(200);
 });
-
 
 module.exports = router;
