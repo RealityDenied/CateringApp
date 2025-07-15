@@ -14,11 +14,15 @@ const QuoteDetails = ({ quote, lead }) => {
 
 
       <div className="quote-tier-header">
-  <div className="tier-title">
-    <h3>{tier?.name?.toUpperCase() || 'UNTITLED'}</h3>
-
-    <div className="tier-subtext">TIER</div>
+ <div className="tier-title-row">
+  <div className="line"></div>
+  <div className="tier-combined-text">
+    {tier?.name?.toUpperCase() || 'UNTITLED'} <span className="tier-label">TIER</span>
   </div>
+  <div className="line"></div>
+</div>
+
+
 
   <div className="tier-info-box">
     <div className="info-block">

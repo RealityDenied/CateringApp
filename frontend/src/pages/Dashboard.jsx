@@ -1,5 +1,5 @@
 import '../styles/dashboard.css';
-import ChatInbox from '../components/Chatinbox.jsx'
+import ChatInbox from '../components/ChatInbox.jsx'
 import ChatWindow from '../components/ChatWindow';
 
 import EventCalendar from '../components/EventCalender';
