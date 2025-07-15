@@ -50,96 +50,114 @@ const CategoryViewer = ({ onCategoryDragStart }) => {
 
   return (
     <div className="category-viewer">
-      <h2>Category Viewer</h2>
+      <h2>Category Management</h2>
 
       <div className="category-create">
-        <input
-          type="text"
-          value={newCategoryName}
-          onChange={e => setNewCategoryName(e.target.value)}
-          placeholder="New category name"
-        />
-        <label>
+        <h3>Create New Category</h3>
+        <div className="category-form">
           <input
-            type="checkbox"
-            checked={newCategoryIsFlexible}
-            onChange={e => setNewCategoryIsFlexible(e.target.checked)}
+            type="text"
+            value={newCategoryName}
+            onChange={e => setNewCategoryName(e.target.value)}
+            placeholder="Enter category name"
           />
-          Flexible (Add-ons)
-        </label>
-        <button onClick={handleAddCategory}>Create Category</button>
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              id="flexible-checkbox"
+              checked={newCategoryIsFlexible}
+              onChange={e => setNewCategoryIsFlexible(e.target.checked)}
+            />
+            <label htmlFor="flexible-checkbox">Flexible (Add-ons)</label>
+          </div>
+          <button onClick={handleAddCategory}>Create Category</button>
+        </div>
       </div>
 
       <div className="category-list">
-        {categories.map(cat => {
-          const isFlexible = cat.isFlexible;
-          return (
-            <div
-              key={cat._id}
-              className="category-block"
-              draggable
-              onDragStart={() => onCategoryDragStart(cat.name)}
-            >
-              <h3>
-                {cat.name}
-                {isFlexible && ' (Flexible)'}
-              </h3>
+        {categories.length === 0 ? (
+          <div className="empty-state">
+            <h3>No Categories Yet</h3>
+            <p>Create your first category to get started</p>
+          </div>
+        ) : (
+          categories.map(cat => {
+            const isFlexible = cat.isFlexible;
+            return (
+              <div
+                key={cat._id}
+                className="category-block"
+                draggable
+                onDragStart={() => onCategoryDragStart(cat.name)}
+              >
+                <h3>
+                  {cat.name}
+                  {isFlexible && ' (Flexible)'}
+                </h3>
 
-              <div className="dish-inputs">
-                <input
-                  type="text"
-                  placeholder="Dish name"
-                  value={newDish[cat.name]?.name || ''}
-                  onChange={e =>
-                    setNewDish(prev => ({
-                      ...prev,
-                      [cat.name]: { ...prev[cat.name], name: e.target.value }
-                    }))
-                  }
-                />
-                {isFlexible && (
-                  <>
+                <div className="dish-inputs">
+                  <div className="dish-input-row">
                     <input
-                      type="number"
-                      placeholder="Price"
-                      value={newDish[cat.name]?.price || ''}
+                      type="text"
+                      placeholder="Dish name"
+                      value={newDish[cat.name]?.name || ''}
                       onChange={e =>
                         setNewDish(prev => ({
                           ...prev,
-                          [cat.name]: { ...prev[cat.name], price: e.target.value }
+                          [cat.name]: { ...prev[cat.name], name: e.target.value }
                         }))
                       }
                     />
-                    <select
-                      value={newDish[cat.name]?.unit || 'per guest'}
-                      onChange={e =>
-                        setNewDish(prev => ({
-                          ...prev,
-                          [cat.name]: { ...prev[cat.name], unit: e.target.value }
-                        }))
-                      }
-                    >
-                      <option value="per guest">per guest</option>
-                      <option value="per stall">per stall</option>
-                    </select>
-                  </>
-                )}
-                <button onClick={() => handleAddDish(cat.name, isFlexible)}>Add Dish</button>
-              </div>
+                    {isFlexible && (
+                      <>
+                        <input
+                          type="number"
+                          placeholder="Price"
+                          value={newDish[cat.name]?.price || ''}
+                          onChange={e =>
+                            setNewDish(prev => ({
+                              ...prev,
+                              [cat.name]: { ...prev[cat.name], price: e.target.value }
+                            }))
+                          }
+                        />
+                        <select
+                          value={newDish[cat.name]?.unit || 'per guest'}
+                          onChange={e =>
+                            setNewDish(prev => ({
+                              ...prev,
+                              [cat.name]: { ...prev[cat.name], unit: e.target.value }
+                            }))
+                          }
+                        >
+                          <option value="per guest">per guest</option>
+                          <option value="per stall">per stall</option>
+                        </select>
+                      </>
+                    )}
+                    <button onClick={() => handleAddDish(cat.name, isFlexible)}>Add Dish</button>
+                  </div>
+                </div>
 
-              <ul>
-                {dishes
-                  .filter(d => d.category === cat.name)
-                  .map(d => (
-                    <li key={d._id}>
-                      {d.name}
-                      {isFlexible && ` — ₹${d.price} (${d.unit})`}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          );
-        })}
+                <ul className="dish-list">
+                  {dishes
+                    .filter(d => d.category === cat.name)
+                    .map(d => (
+                      <li key={d._id} className="dish-item">
+                        <span className="dish-name">{d.name}</span>
+                        {isFlexible && (
+                          <span className="dish-price">
+                            ₹{d.price}
+                            <span className="dish-unit">({d.unit})</span>
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

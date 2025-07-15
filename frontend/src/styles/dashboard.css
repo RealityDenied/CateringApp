@@ -39,6 +39,39 @@ body, html {
   padding: 12px 20px;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 12px;
+}
+
+.navbar button {
+  padding: 8px 16px;
+  border: 2px solid #1BAA96;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navbar button:hover {
+  background-color: #1BAA96;
+  color: white;
+}
+
+.navbar button:active {
+  transform: translateY(1px);
+}
+
+.navbar button:first-child {
+  background-color: #1BAA96;
+  color: white;
+}
+
+.navbar button:first-child:hover {
+  background-color: #158a73;
+  color: white;
 }
 
 .chatbar {
