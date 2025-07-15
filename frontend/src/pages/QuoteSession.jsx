@@ -88,20 +88,25 @@ const QuoteSession = () => {
     const guests = lead?.numberOfGuests || 0;
     let base = selectedTier.pricePerPlate * guests;
 
+    // Add price for lead-selected add-ons
     for (const item of selectedAddOns) {
       const dish = selectedTier.categories
         .flatMap(c => c.dishIds)
         .find(d => d._id === item.dishId);
       if (!dish) continue;
-      if (item.unit === 'per guest') {
-        base += dish.price * guests;
-      } else {
-        base += dish.price;
-      }
+      base += item.unit === 'per guest' ? dish.price * guests : dish.price;
+    }
+
+    // ✅ Add price for chef-added add-ons
+    for (const item of (lead?.quote?.selectedAddOns || [])) {
+      const dish = item.dishId;
+      if (!dish || !dish.price) continue;
+      base += item.unit === 'per guest' ? dish.price * guests : dish.price;
     }
 
     return base;
   };
+
 
   const handleSubmit = async () => {
   if (lead?.quote) {
@@ -178,6 +183,22 @@ const QuoteSession = () => {
               ))}
             </div>
           ))}
+
+          {(lead?.quote?.selectedAddOns || []).length > 0 && (
+                <div
+                  style={{ border: '1px solid #aaa', padding: '10px', marginBottom: '20px', background: '#f9f9f9' }}
+                >
+                  <h4>Chef Added Add-Ons</h4>
+                  <ul>
+                    {lead.quote.selectedAddOns.map((add, i) => (
+                      <li key={i}>
+                        ➕ {add.dishId?.name} — ₹{add.dishId?.price} ({add.unit})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
           <p><strong>Total Price:</strong> ₹{calculateTotal()}</p>
           <button onClick={handleSubmit}>Submit My Selection</button>
         </div>

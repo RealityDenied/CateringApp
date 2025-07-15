@@ -1,59 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import '../styles/newquotedetails.css';
-
 
 const QuoteDetails = ({ quote, lead }) => {
   const guests = lead?.numberOfGuests || 0;
   const tier = quote?.tierId;
 
-  // Calculate add-on total
-  let addOnTotal = 0;
+  const [newDish, setNewDish] = useState({ name: '', price: '', unit: 'per guest' });
+
+  const handleAddCustomDish = async () => {
+    if (!newDish.name || !newDish.price) return;
+
+    try {
+      // Step 1: Create the dish in the database
+      const dishResponse = await axios.post('/api/dishes', {
+        name: newDish.name,
+        price: Number(newDish.price),
+        category: ''
+      });
+
+      const dish = dishResponse.data;
+
+      // Step 2: Attach this dish to the quote as an add-on
+      await axios.patch(`/api/quotesNew/${quote._id}/add-addon`, {
+        dishId: dish._id,
+        unit: newDish.unit
+      });
+
+      // Step 3: Update local quote object to reflect change immediately
+      quote.selectedAddOns = quote.selectedAddOns || [];
+      quote.selectedAddOns.push({
+        dishId: dish,
+        unit: newDish.unit
+      });
+
+      // Reset input
+      setNewDish({ name: '', price: '', unit: 'per guest' });
+    } catch (error) {
+      console.error('Error adding custom dish to quote:', error);
+    }
+  };
+
+  const calculateAddOnSubtotal = (dish, unit) => {
+    const price = dish?.price || 0;
+    return unit === 'per guest' ? price * guests : price;
+  };
+
+  const total =
+    ((tier?.pricePerPlate || 0) * guests) +
+    (quote.selectedAddOns || []).reduce(
+      (sum, add) => sum + calculateAddOnSubtotal(add.dishId, add.unit),
+      0
+    );
 
   return (
     <div className="quote-details">
-
-
       <div className="quote-tier-header">
- <div className="tier-title-row">
-  <div className="line"></div>
-  <div className="tier-combined-text">
-    {tier?.name?.toUpperCase() || 'UNTITLED'} <span className="tier-label">TIER</span>
-  </div>
-  <div className="line"></div>
-</div>
+        <div className="tier-title-row">
+          <div className="line"></div>
+          <div className="tier-combined-text">
+            {tier?.name?.toUpperCase() || 'UNTITLED'} <span className="tier-label">TIER</span>
+          </div>
+          <div className="line"></div>
+        </div>
 
-
-
-  <div className="tier-info-box">
-    <div className="info-block">
-      
-      <div className="info-label">Per Plate</div>
-      <div className="info-value"><div className="info-icon">🧑‍🍳</div>₹{tier?.pricePerPlate || 0}</div>
-    </div>
-
-    <div className="tier-center-icon">🍽️</div>
-
-    <div className="info-block">
-      
-      <div className="info-label">Guests</div>
-      <div className="info-value"><div className="info-icon">👥</div>{lead?.numberOfGuests || 0}</div>
-    </div>
-  </div>
-</div>
-
-
-
-
-      
+        <div className="tier-info-box">
+          <div className="info-block">
+            <div className="info-label">Per Plate</div>
+            <div className="info-value"><div className="info-icon">🧑‍🍳</div>₹{tier?.pricePerPlate || 0}</div>
+          </div>
+          <div className="tier-center-icon">🍽️</div>
+          <div className="info-block">
+            <div className="info-label">Guests</div>
+            <div className="info-value"><div className="info-icon">👥</div>{guests}</div>
+          </div>
+        </div>
+      </div>
 
       {(quote.selectedDishes || []).map((group, idx) => (
         <div key={idx} className="quote-category">
           <div className="category-title">{group.category}</div>
           <ul className="dish-list">
             {(group.dishIds || []).map(dish => (
-              <li key={dish._id} className="dish-selected">
-                 {dish.name}
-              </li>
+              <li key={dish._id} className="dish-selected">{dish.name}</li>
             ))}
           </ul>
         </div>
@@ -61,19 +90,13 @@ const QuoteDetails = ({ quote, lead }) => {
 
       {(quote.selectedAddOns || []).length > 0 && (
         <div className="quote-addons">
-          <div></div>
+          <div className="category-title">Add-Ons</div>
           <ul>
             {quote.selectedAddOns.map((add, i) => {
-              const price = add.dishId?.price || 0;
-              const unit = add.unit;
-              const name = add.dishId?.name || 'Unnamed Dish';
-
-              const subtotal = unit === 'per guest' ? price * guests : price;
-              addOnTotal += subtotal;
-
+              const subtotal = calculateAddOnSubtotal(add.dishId, add.unit);
               return (
                 <li key={i}>
-                  ➕ {name} — ₹{price} ({unit}) = ₹{subtotal}
+                  ➕ {add.dishId?.name} — ₹{add.dishId?.price} ({add.unit}) = ₹{subtotal}
                 </li>
               );
             })}
@@ -82,8 +105,7 @@ const QuoteDetails = ({ quote, lead }) => {
       )}
 
       <div className="quote-total">
-         <strong>TOTAL :</strong> ₹
-        {((tier?.pricePerPlate || 0) * guests) + addOnTotal}
+        <strong>TOTAL :</strong> ₹{total}
       </div>
 
       {(quote.additionalRequests || []).length > 0 && (
@@ -96,6 +118,30 @@ const QuoteDetails = ({ quote, lead }) => {
           </ul>
         </div>
       )}
+
+      <div className="quote-custom-input">
+        <h4>Add Custom Dish</h4>
+        <input
+          type="text"
+          placeholder="Dish Name"
+          value={newDish.name}
+          onChange={e => setNewDish({ ...newDish, name: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={newDish.price}
+          onChange={e => setNewDish({ ...newDish, price: e.target.value })}
+        />
+        <select
+          value={newDish.unit}
+          onChange={e => setNewDish({ ...newDish, unit: e.target.value })}
+        >
+          <option value="per guest">Per Guest</option>
+          <option value="fixed">Fixed</option>
+        </select>
+        <button onClick={handleAddCustomDish}>Add</button>
+      </div>
     </div>
   );
 };

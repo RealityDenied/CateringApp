@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
         populate: [
           { path: 'tierId' },
           { path: 'selectedDishes.dishIds' },
-          { path: 'selectedAddOns.dishId' } // ✅ FIXED
+          { path: 'selectedAddOns.dishId' } 
         ]
       })
       .sort({ createdAt: -1 });
@@ -51,7 +51,7 @@ router.get('/by-token/:token', async (req, res) => {
         populate: [
           { path: 'tierId' },
           { path: 'selectedDishes.dishIds' },
-          { path: 'selectedAddOns.dishId' } // ✅ FIXED
+          { path: 'selectedAddOns.dishId' } 
         ]
       });
 
