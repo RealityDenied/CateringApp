@@ -63,4 +63,32 @@ router.get('/by-token/:token', async (req, res) => {
   }
 });
 
+// POST /api/leads
+router.post('/', async (req, res) => {
+  try {
+    const { name, phone, contactNumber, eventType, eventDate, numberOfGuests, location } = req.body;
+    const sessionToken = require('crypto').randomBytes(16).toString('hex');
+
+    const lead = new Lead({
+      name,
+      phone,
+      contactNumber,
+      eventType,
+      eventDate: new Date(eventDate),
+      numberOfGuests,
+      location,
+      sessionToken
+    });
+
+    await lead.save();
+    const quoteLink = `${process.env.CLIENT_URL}/quote-editor/${sessionToken}`;
+    res.status(201).json({ lead, quoteLink });
+  } catch (error) {
+    console.error('Error creating lead:', error);
+    res.status(500).json({ error: 'Failed to create lead' });
+  }
+});
+
+
+
 module.exports = router;
