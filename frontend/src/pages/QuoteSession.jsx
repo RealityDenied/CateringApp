@@ -104,10 +104,15 @@ const QuoteSession = () => {
   };
 
   const handleSubmit = async () => {
-    const formatted = Object.entries(selectedDishes).map(([cat, ids]) => ({
-      category: cat,
-      dishIds: ids
-    }));
+  if (lead?.quote) {
+    alert('🚫 Quote already submitted. Please contact us if you want to make changes.');
+    return;
+  }
+
+  const formatted = Object.entries(selectedDishes).map(([cat, ids]) => ({
+    category: cat,
+    dishIds: ids
+  }));
 
     try {
       const res = await API.post('/quotesNew', {

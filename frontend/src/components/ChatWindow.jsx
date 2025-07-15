@@ -52,7 +52,33 @@ useEffect(() => {
 
   <div className="chat-body">
     <div className="chat-left">
-      {quote ? <QuoteBubble quote={quote} lead={selectedLead} /> : <p>No quote...</p>}
+      {quote ? (
+          <QuoteBubble quote={quote} lead={selectedLead} />
+        ) : (
+          <div className="no-quote-box">
+            <p>No quote available for this lead.</p>
+            <button
+              onClick={async () => {
+                try {
+                  const configRes = await API.get('/config');
+                  const clientUrl = configRes.data.CLIENT_URL;
+                  const url = `${clientUrl}/quote-editor/${selectedLead?.sessionToken}`;
+                  navigator.clipboard.writeText(url);
+                  alert('📋 Quote session link copied to clipboard!');
+                } catch (error) {
+                  console.error('Error fetching config:', error);
+                  // Fallback to original behavior
+                  const url = `${window.location.origin}/quote-editor/${selectedLead?.sessionToken}`;
+                  navigator.clipboard.writeText(url);
+                  alert('📋 Quote session link copied to clipboard!');
+                }
+              }}
+            >
+              Copy Quote Session
+            </button>
+          </div>
+        )}
+
     </div>
 
     <div className="chat-right">

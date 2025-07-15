@@ -73,7 +73,12 @@ app.get('/api', (req, res) => {
   res.send('✅ API root reached.');
 });
 
-
+// ✅ Config endpoint to expose CLIENT_URL
+app.get('/api/config', (req, res) => {
+  res.json({
+    CLIENT_URL: process.env.CLIENT_URL
+  });
+});
 
 // ✅ Root route to test server
 app.get('/', (req, res) => {
