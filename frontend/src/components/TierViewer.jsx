@@ -71,59 +71,75 @@ const TierViewer = ({ draggedCategory }) => {
 
   return (
     <div className="tier-viewer">
-      <h2>Tier Viewer</h2>
+      <h2>Tier Management</h2>
+      
       <div className="create-tier">
-        <input
-          type="text"
-          placeholder="Tier name"
-          value={newTierName}
-          onChange={e => setNewTierName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Per plate price"
-          value={newTierPrice}
-          onChange={e => setNewTierPrice(e.target.value)}
-        />
-        <button onClick={createTier}>Create Tier</button>
+        <h3>Create New Tier</h3>
+        <div className="tier-form">
+          <input
+            type="text"
+            placeholder="Tier name"
+            value={newTierName}
+            onChange={e => setNewTierName(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Per plate price"
+            value={newTierPrice}
+            onChange={e => setNewTierPrice(e.target.value)}
+          />
+          <button onClick={createTier}>Create Tier</button>
+        </div>
       </div>
 
       <div className="tier-list">
-        {tiers.map(tier => (
-          <div
-            key={tier._id}
-            className="tier-block"
-            onDragOver={e => e.preventDefault()}
-            onDrop={() => handleDrop(tier._id, draggedCategory)}
-          >
-            <div className="tier-header">
-              <h3>{tier.name} — ₹{tier.pricePerPlate} per plate</h3>
-              <button onClick={() => deleteTier(tier._id)}>Delete Tier</button>
-            </div>
-
-            {tier.categories.map(cat => (
-              <div key={cat.category} className="category-section">
-                <div className="category-header">
-                  <h4>
-                    {cat.category}
-                    {cat.maxSelectable ? ` (max: ${cat.maxSelectable})` : ' (Flexible)'}
-                  </h4>
-                  {cat.maxSelectable && (
-                    <button onClick={() => editMaxSelectable(tier._id, cat.category, cat.maxSelectable)}>
-                      Edit Limit
-                    </button>
-                  )}
-                  <button onClick={() => removeCategory(tier._id, cat.category)}>Remove</button>
-                </div>
-                <ul>
-                  {cat.dishIds.map(d => (
-                    <li key={d._id}>{d.name}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+        {tiers.length === 0 ? (
+          <div className="empty-tier">
+            No tiers created yet. Create your first tier to get started!
           </div>
-        ))}
+        ) : (
+          tiers.map(tier => (
+            <div
+              key={tier._id}
+              className="tier-block"
+              onDragOver={e => e.preventDefault()}
+              onDrop={() => handleDrop(tier._id, draggedCategory)}
+            >
+              <div className="tier-header">
+                <h3>{tier.name} — ₹{tier.pricePerPlate} per plate</h3>
+                <button onClick={() => deleteTier(tier._id)}>Delete Tier</button>
+              </div>
+
+              {tier.categories.length === 0 ? (
+                <div className="empty-tier">
+                  Drag categories here to add them to this tier
+                </div>
+              ) : (
+                tier.categories.map(cat => (
+                  <div key={cat.category} className="category-section">
+                    <div className="category-header">
+                      <h4>
+                        {cat.category}
+                        {cat.maxSelectable ? ` (max: ${cat.maxSelectable})` : ' (Flexible)'}
+                      </h4>
+                      {cat.maxSelectable && (
+                        <button onClick={() => editMaxSelectable(tier._id, cat.category, cat.maxSelectable)}>
+                          Edit Limit
+                        </button>
+                      )}
+                      <button onClick={() => removeCategory(tier._id, cat.category)}>Remove</button>
+                    </div>
+                    <ul>
+                      {cat.dishIds.map(d => (
+                        <li key={d._id}>{d.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

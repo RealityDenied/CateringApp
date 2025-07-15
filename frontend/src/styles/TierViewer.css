@@ -1,40 +1,328 @@
 .tier-viewer {
   width: 50%;
+  padding: 8px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background-color: #f8fafc;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tier-viewer h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+  text-align: center;
+  position: relative;
+}
+
+.tier-viewer h2::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #1BAA96, #15918a);
+  border-radius: 2px;
+}
+
+/* === Create Tier Section === */
+.create-tier {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.create-tier h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.create-tier h3::before {
+  content: '🏷️';
+  font-size: 0.875rem;
+}
+
+.tier-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .create-tier input {
-  margin-right: 10px;
-  padding: 4px;
+  flex: 1;
+  min-width: 120px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.create-tier input:focus {
+  outline: none;
+  border-color: #1BAA96;
+  box-shadow: 0 0 0 2px rgba(27, 170, 150, 0.1);
+}
+
+.create-tier input::placeholder {
+  color: #9ca3af;
 }
 
 .create-tier button {
-  padding: 5px 10px;
-  margin-top: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #1BAA96, #15918a);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(27, 170, 150, 0.2);
+  white-space: nowrap;
+}
+
+.create-tier button:hover {
+  background: linear-gradient(135deg, #15918a, #137a6f);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(27, 170, 150, 0.3);
+}
+
+.create-tier button:active {
+  transform: translateY(0);
+}
+
+/* === Tier List === */
+.tier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .tier-block {
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  padding: 10px;
-  background: #eef;
-  min-height: 100px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
 }
 
+.tier-block:hover {
+  border-color: #1BAA96;
+  box-shadow: 0 4px 12px rgba(27, 170, 150, 0.15);
+  transform: translateY(-1px);
+}
+
+.tier-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1BAA96, #15918a);
+}
+
+/* === Tier Header === */
 .tier-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
 }
 
+.tier-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tier-header h3::before {
+  content: '💰';
+  font-size: 0.875rem;
+}
+
+.tier-header button {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.tier-header button:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* === Category Section === */
 .category-section {
-  margin-top: 10px;
-  padding: 5px;
-  background: #fff;
-  border: 1px dashed #aaa;
+  margin-bottom: 10px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  border-left: 4px solid #1BAA96;
+}
+
+.category-section:last-child {
+  margin-bottom: 0;
 }
 
 .category-header {
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.category-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.category-header h4::before {
+  content: '📋';
+  font-size: 0.75rem;
+}
+
+.category-header button {
+  padding: 4px 8px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.category-header button:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.category-header button:first-of-type {
+  background: #1BAA96;
+}
+
+.category-header button:first-of-type:hover {
+  background: #15918a;
+}
+
+/* === Dish List === */
+.category-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.category-section li {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.category-section li:hover {
+  background: #f0f9ff;
+  border-color: #1BAA96;
+}
+
+/* === Empty State === */
+.empty-tier {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.empty-tier::before {
+  content: '📦';
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* === Drop Zone Enhancement === */
+.tier-block[data-drag-over="true"] {
+  border-color: #1BAA96;
+  background: #f0f9ff;
+  border-style: dashed;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .tier-viewer {
+    width: 100%;
+    padding: 8px;
+  }
+  
+  .tier-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .create-tier input {
+    min-width: 100%;
+  }
+  
+  .category-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .category-header h4 {
+    margin-bottom: 8px;
+  }
+  
+  .category-header button {
+    align-self: flex-start;
+  }
 }

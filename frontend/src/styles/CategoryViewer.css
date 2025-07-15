@@ -137,9 +137,9 @@
 
 /* === Category List === */
 .category-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   margin-top: 0;
 }
 
@@ -147,7 +147,7 @@
   background: white;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   cursor: grab;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -176,10 +176,10 @@
 }
 
 .category-block h3 {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -198,9 +198,9 @@
 .dish-inputs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 12px;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 10px;
   background: #f8fafc;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -208,23 +208,23 @@
 
 .dish-input-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .dish-inputs input,
 .dish-inputs select {
-  padding: 6px 10px;
+  padding: 5px 8px;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 500;
   color: #374151;
   background: white;
   transition: all 0.2s ease;
   flex: 1;
-  min-width: 80px;
+  min-width: 60px;
 }
 
 .dish-inputs input:focus,
@@ -239,12 +239,12 @@
 }
 
 .dish-inputs button {
-  padding: 6px 12px;
+  padding: 5px 10px;
   background: linear-gradient(135deg, #1BAA96, #15918a);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -267,11 +267,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  margin-bottom: 6px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
   background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: 4px;
   transition: all 0.2s ease;
 }
 
@@ -288,17 +288,17 @@
   font-weight: 500;
   color: #374151;
   flex: 1;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .dish-price {
   font-weight: 600;
   color: #1BAA96;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .dish-unit {
-  font-size: 11px;
+  font-size: 10px;
   color: #6b7280;
   margin-left: 4px;
 }
@@ -310,6 +310,10 @@
     padding: 12px;
     height: 100vh;
     overflow-y: auto;
+  }
+  
+  .category-list {
+    grid-template-columns: 1fr;
   }
   
   .dish-input-row {
@@ -334,8 +338,9 @@
 /* === Empty State === */
 .empty-state {
   text-align: center;
-  padding: 32px 16px;
+  padding: 24px 12px;
   color: #6b7280;
+  grid-column: 1 / -1;
 }
 
 .empty-state h3 {
