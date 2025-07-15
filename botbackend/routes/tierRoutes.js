@@ -14,11 +14,19 @@ router.get('/', async (req, res) => {
 
 // Create a new tier
 router.post('/', async (req, res) => {
-  const { name, description } = req.body;
-  const tier = new Tier({ name, description, categories: [] });
+  const { name, description, pricePerPlate } = req.body;
+
+  const tier = new Tier({
+    name,
+    description,
+    pricePerPlate,
+    categories: []
+  });
+
   await tier.save();
   res.status(201).json(tier);
 });
+
 
 // Add or update a categoryConfig in a tier
 router.put('/:id/categories', async (req, res) => {

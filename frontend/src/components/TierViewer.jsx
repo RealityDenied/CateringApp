@@ -24,6 +24,7 @@ const TierViewer = ({ draggedCategory }) => {
     });
     setNewTierName('');
     setNewTierPrice('');
+    console.log('New tier price:', newTierPrice);
     fetchTiers();
   };
 
