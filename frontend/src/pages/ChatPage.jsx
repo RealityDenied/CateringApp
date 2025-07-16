@@ -1,4 +1,4 @@
-import ChatInbox from '../components/Chatinbox';
+import ChatInbox from '../components/ChatInbox';
 import ChatWindow from '../components/ChatWindow';
 import '../styles/chat.css';
 

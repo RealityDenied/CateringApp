@@ -79,6 +79,9 @@
   overflow-y: auto;
   padding-right: 6px;
   scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 /* Input bar always at bottom */
@@ -99,13 +102,14 @@
   font-size: 14px;
   max-width: 70%;
   word-wrap: break-word;
-  display: inline-block;
+  display: block;
   line-height: 1.4;
 }
 
 /* LEAD (left) */
 .chat-bubble.left {
-  background-color: #eeeeee;
+  background-color: #C4C4C4;
+  background-color: rgba(196, 196, 196, 0.3);
   color: #111;
   align-self: flex-start;
   border-top-left-radius: 0;
@@ -114,7 +118,8 @@
 
 /* CHEF (right) */
 .chat-bubble.right {
-  background-color: #d0f0c0;
+  /* background-color: #1BAA96; */
+  background-color: rgba(27, 170, 150, 0.3);
   color: #111;
   align-self: flex-end;
   border-top-right-radius: 0;
@@ -134,7 +139,7 @@
 .chat-input button {
   padding: 10px 16px;
   border-radius: 6px;
-  background-color: #4caf50;
+  background-color: #1BAA96;
   color: white;
   border: none;
   cursor: pointer;
