@@ -206,7 +206,10 @@
 
 .quote-tier-header {
   
-  background-color: rgba(27, 170, 150, 0.3);
+  
+  background-color: rgba(196, 196, 196, 0.3);
+   background-color: rgba(27, 170, 150, 0.3);
+
   padding: 5px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -325,7 +328,7 @@
 .quote-custom-input {
   margin-top: 20px;
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: rgba(196, 196, 196, 0.3);
   border-radius: 12px;
   border: 1px solid #e0e0e0;
 }
@@ -351,7 +354,7 @@
 .quote-custom-input button {
   width: 100%;
   padding: 10px;
-  background-color: #4f46e5;
+  background-color: #1BAA96;
   color: white;
   border: none;
   border-radius: 6px;
