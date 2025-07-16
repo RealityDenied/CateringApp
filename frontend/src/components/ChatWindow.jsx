@@ -10,17 +10,49 @@ function ChatWindow() {
   const quote = selectedLead?.quote;
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [lastMessageTime, setLastMessageTime] = useState(null);
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
     if (!selectedLead?._id) return;
 
     const fetchMessages = async () => {
-      const res = await API.get(`/messages/lead/${selectedLead._id}`);
-      setMessages(res.data);
+      try {
+        const res = await API.get(`/messages/lead/${selectedLead._id}`);
+        const newMessages = res.data;
+        
+        // Update online status
+        setIsOnline(true);
+        
+        // Check if we have new messages
+        if (newMessages.length > 0) {
+          const latestMessageTime = new Date(newMessages[newMessages.length - 1].timestamp).getTime();
+          
+          // Only update if we have new messages or this is the first load
+          if (!lastMessageTime || latestMessageTime > lastMessageTime) {
+            setMessages(newMessages);
+            setLastMessageTime(latestMessageTime);
+          }
+        } else if (messages.length > 0) {
+          // If we had messages before but now there are none, clear the messages
+          setMessages([]);
+          setLastMessageTime(null);
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        setIsOnline(false);
+      }
     };
 
+    // Initial fetch
     fetchMessages();
-  }, [selectedLead]);
+
+    // Set up polling for new messages every 3 seconds
+    const pollInterval = setInterval(fetchMessages, 3000);
+
+    // Cleanup interval on unmount or when selectedLead changes
+    return () => clearInterval(pollInterval);
+  }, [selectedLead, lastMessageTime, messages.length]);
 
   //  New useEffect for scrolling to bottom when messages update
 useEffect(() => {
@@ -39,11 +71,19 @@ useEffect(() => {
       text: inputMessage
     };
 
-    // Send to backend + WhatsApp
-    await API.post('/messages/send', payload);
+    try {
+      // Send to backend + WhatsApp
+      await API.post('/messages/send', payload);
 
-    setMessages(prev => [...prev, { ...payload, timestamp: new Date() }]);
-    setInputMessage('');
+      // Add the message immediately to the UI
+      const newMessage = { ...payload, timestamp: new Date() };
+      setMessages(prev => [...prev, newMessage]);
+      setLastMessageTime(new Date().getTime());
+      setInputMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -95,8 +135,20 @@ useEffect(() => {
           value={inputMessage}
           onChange={e => setInputMessage(e.target.value)}
           placeholder="Type your message…"
+          onKeyPress={e => e.key === 'Enter' && handleSend()}
         />
         <button onClick={handleSend}>Send</button>
+        {!isOnline && (
+          <span style={{ 
+            fontSize: '12px', 
+            color: '#ff6b6b', 
+            marginLeft: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            ⚠️ Offline
+          </span>
+        )}
       </div>
     </div>
   </div>
