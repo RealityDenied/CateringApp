@@ -152,6 +152,59 @@
   margin-top: 4px;
 }
 
+/* No quote box styling */
+.no-quote-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 30px;
+  text-align: center;
+  background: transparent;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+  box-sizing: border-box;
+}
+
+.no-quote-box p {
+  margin: 0 0 25px 0;
+  font-size: 18px;
+  color: #6c757d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.no-quote-box button {
+  background: linear-gradient(135deg, #1BAA96 0%, #16947d 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(27, 170, 150, 0.3);
+  min-width: 200px;
+}
+
+.no-quote-box button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(27, 170, 150, 0.4);
+  background: linear-gradient(135deg, #16947d 0%, #1BAA96 100%);
+}
+
+.no-quote-box button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(27, 170, 150, 0.3);
+}
+
+.no-quote-box button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(27, 170, 150, 0.2);
+}
+
 /*  Responsive for mobile */
 @media (max-width: 768px) {
   .chat-body {
