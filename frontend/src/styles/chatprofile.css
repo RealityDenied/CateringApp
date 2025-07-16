@@ -68,15 +68,20 @@
 /* === RIGHT SIDE === */
 .event-core-info2 {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 8px;
   flex-shrink: 0;
+  min-width: 180px;
+  height: 100%;
+  flex-direction: row;
+  justify-content:center;
+  padding: 5px 0;
 }
 
 .meta-box {
-  background-color: #ddd;
+  background-color: #b6e2dd;
   color: #000;
-  padding: 6px 10px;
+  padding: 4px 6px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
@@ -85,14 +90,67 @@
   justify-content: center;
   gap: 6px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   text-align: center;
+  
+  min-height: 32px;
+}
+
+.meta-box img {
+  object-fit: contain;
+}
+
+.location-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.calendar-icon {
+  width: 32px;
+  height: 32px;
 }
 
 .calendar-box {
   flex-direction: column;
-  gap: 2px;
-  padding: 6px 12px;
+  gap: 0px;
+  padding: 2px 4px;
+  min-width: 50px;
+  height: 90%;
+  position: relative;
+}
+
+.calendar-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.calendar-date {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  line-height: 1;
+  margin-top: 5px;
+}
+
+.calendar-month {
+  font-size: 10px;
+  font-weight: 600;
+  color: #000;
+  line-height: 1;
+  margin-top: 2px;
+  text-align: center;
 }
 
 .meta-sub {

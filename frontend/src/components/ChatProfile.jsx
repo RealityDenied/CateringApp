@@ -19,6 +19,13 @@ function ChatProfile() {
   const formattedDate = new Date(eventDate);
   const day = formattedDate.getDate();
   const month = formattedDate.toLocaleString('default', { month: 'short' });
+  
+  // Format time to show like "4 PM"
+  const formattedTime = new Date(`2000-01-01T${eventTime}`).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
 
   return (
     <div className="chat-profile">
@@ -40,13 +47,16 @@ function ChatProfile() {
 
       {/* Right Section */}
       <div className="event-core-info2">
-        <div className="up-downstack">
-        <div className="meta-box">⏰ {eventTime}</div>
-        <div className="meta-box">📍 <strong>{location}</strong></div>
+        <div className="meta-box">
+          <img src="/icons/location.png" alt="location" className="location-icon" />
+          {location}
         </div>
         <div className="meta-box calendar-box">
-          📅 <strong>{day}</strong>
-          <div className="meta-sub">{month}</div>
+          <div className="calendar-icon-container">
+            <img src="/icons/calendar.png" alt="calendar" className="calendar-icon" />
+            <div className="calendar-date">{day}</div>
+          </div>
+          <div className="calendar-month">{month}</div>
         </div>
       </div>
     </div>
