@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/newquotedetails.css';
+import { API } from '../utils/api';
+
 
 const QuoteDetails = ({ quote, lead }) => {
   const guests = lead?.numberOfGuests || 0;
@@ -145,6 +147,28 @@ const QuoteDetails = ({ quote, lead }) => {
 
       <div className="downquote-details">
         <strong>TOTAL :</strong> ₹{total}
+        <a
+        href="#"
+        className="copy-quote-link"
+        onClick={async (e) => {
+          e.preventDefault();
+          try {
+            const configRes = await API.get('/config');
+            const clientUrl = configRes.data.CLIENT_URL;
+            const url = `${clientUrl}/quote-editor/${lead?.sessionToken}`;
+            await navigator.clipboard.writeText(url);
+            alert('📋 Quote session link copied to clipboard!');
+          } catch (error) {
+            console.error('Error fetching config:', error);
+            const fallbackUrl = `${window.location.origin}/quote-editor/${lead?.sessionToken}`;
+            await navigator.clipboard.writeText(fallbackUrl);
+            alert('📋 Quote session link copied to clipboard!');
+          }
+        }}
+      >
+        Copy Quote
+      </a>
+
       </div>
     </div>
   );
