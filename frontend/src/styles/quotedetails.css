@@ -2,6 +2,24 @@
 
 .quote-details {
   font-size: 14px;
+  position: relative;
+  background: transparent;
+}
+
+.quote-details::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/icons/chatbackground.png');
+  background-repeat: repeat;
+  background-size: 190px 190px;
+  background-position: top left;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .quote-tier {

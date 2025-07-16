@@ -1,5 +1,5 @@
 .quote-details {
-  background-color: #ffffff;
+  background-color: transparent;
   border-radius: 16px;
   padding: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -192,7 +192,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 2px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   padding: 4px 5px;
   border: 1px solid #ddd;
@@ -234,7 +234,7 @@
   border-radius: 50%;
   padding: 8px;
   margin: 0 20px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 

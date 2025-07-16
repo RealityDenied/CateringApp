@@ -5,7 +5,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: transparent;
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -25,10 +25,12 @@
   max-width: 50%;
   min-width: 0;
   overflow-y: auto;
-  background-color: #fafafa;
+  background: transparent;
+  
   
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* Right: Real chat */
@@ -42,7 +44,33 @@
   display: flex;
   flex-direction: column;
   border-left: 1px solid #eee;
-  background-color: #fafafa;
+  background-color: rgba(250, 250, 250, 0.5);
+  position: relative;
+}
+
+.chat-left::before,
+.chat-right::before,
+.real-chat-messages::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/icons/chatbackground.png');
+  background-repeat: repeat;
+  background-size: 190px 190px;
+  background-position: top left;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chat-left > *,
+.chat-right > *,
+.real-chat-messages > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* Scrollable message thread */

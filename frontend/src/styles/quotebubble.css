@@ -2,18 +2,18 @@
   width: 100%;
   
   border-radius: 12px;
-  background: #e0ffe0;
+  background: transparent;
 }
 
 .quote-bubble.right {
  
-  background: #dbe9ff;
+  background: transparent;
   width:97%;
 }
 
 .quote-bubble.left {
-  
-  background: #fffbe0;
+
+  background: transparent;
   width:97%;
 
 }

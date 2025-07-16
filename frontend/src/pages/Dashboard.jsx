@@ -22,7 +22,7 @@ const Dashboard = () => {
         <div className="navbar">
           <button onClick={() => setShowAddEvent(true)}>+ New Booking</button>
           <button onClick={() => {}}>Leads</button>
-          <button onClick={() => navigate('/menu-module')}>Menu</button>
+          <button onClick={() => navigate('/menumodule')}>Menu</button>
           <button onClick={() => alert('🧾 Payments module coming soon')}>Payments</button>
           <button onClick={() => alert('🔍 Search coming soon')}>Search</button>
         </div>
