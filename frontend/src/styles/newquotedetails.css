@@ -5,6 +5,74 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   font-family: 'Inter', sans-serif;
   color: #1a1a1a;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.upquote-details {
+  height: 20%;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.midquote-details {
+  height: 70%;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+
+.midquote-details::-webkit-scrollbar {
+  width: 6px;
+}
+
+.midquote-details::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.midquote-details::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.midquote-details::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.downquote-details {
+  height: 10%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  background-color: #f5f7fa;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #d0d5dc;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+/* Remove old quote-content styles to avoid conflicts */
+.quote-content {
+  display: none;
 }
 
 /* Tier line */
@@ -33,7 +101,11 @@
 
 /* Each Category Block */
 .quote-category {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+.quote-category:first-child {
+  margin-top: 0;
 }
 
 .category-title {
@@ -91,16 +163,9 @@
   justify-content: space-between;
 }
 
-/* Total */
+/* Total - Legacy styles (now handled by .downquote-details) */
 .quote-total {
-  margin-top: 24px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #111;
-  background-color: #f5f7fa;
-  padding: 12px 18px;
-  border-radius: 12px;
-  border: 1px solid #d0d5dc;
+  display: none; /* Hide to avoid conflicts with new structure */
 }
 
 /* Additional Requests */
@@ -132,7 +197,11 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Centered Tier Title */
@@ -237,4 +306,49 @@
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
+
+/* Custom Input Form */
+.quote-custom-input {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.quote-custom-input h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.quote-custom-input input,
+.quote-custom-input select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.quote-custom-input button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.quote-custom-input button:hover {
+  background-color: #4338ca;
+}
+
 

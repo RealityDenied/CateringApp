@@ -55,92 +55,96 @@ const QuoteDetails = ({ quote, lead }) => {
 
   return (
     <div className="quote-details">
-      <div className="quote-tier-header">
-        <div className="tier-title-row">
-          <div className="line"></div>
-          <div className="tier-combined-text">
-            {tier?.name?.toUpperCase() || 'UNTITLED'} <span className="tier-label">TIER</span>
+      <div className="upquote-details">
+        <div className="quote-tier-header">
+          <div className="tier-title-row">
+            <div className="line"></div>
+            <div className="tier-combined-text">
+              {tier?.name?.toUpperCase() || 'UNTITLED'} <span className="tier-label">TIER</span>
+            </div>
+            <div className="line"></div>
           </div>
-          <div className="line"></div>
-        </div>
 
-        <div className="tier-info-box">
-          <div className="info-block">
-            <div className="info-label">Per Plate</div>
-            <div className="info-value"><div className="info-icon">🧑‍🍳</div>₹{tier?.pricePerPlate || 0}</div>
-          </div>
-          <div className="tier-center-icon">🍽️</div>
-          <div className="info-block">
-            <div className="info-label">Guests</div>
-            <div className="info-value"><div className="info-icon">👥</div>{guests}</div>
+          <div className="tier-info-box">
+            <div className="info-block">
+              <div className="info-label">Per Plate</div>
+              <div className="info-value"><div className="info-icon">🧑‍🍳</div>₹{tier?.pricePerPlate || 0}</div>
+            </div>
+            <div className="tier-center-icon">🍽️</div>
+            <div className="info-block">
+              <div className="info-label">Guests</div>
+              <div className="info-value"><div className="info-icon">👥</div>{guests}</div>
+            </div>
           </div>
         </div>
       </div>
 
-      {(quote.selectedDishes || []).map((group, idx) => (
-        <div key={idx} className="quote-category">
-          <div className="category-title">{group.category}</div>
-          <ul className="dish-list">
-            {(group.dishIds || []).map(dish => (
-              <li key={dish._id} className="dish-selected">{dish.name}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div className="midquote-details">
+        {(quote.selectedDishes || []).map((group, idx) => (
+          <div key={idx} className="quote-category">
+            <div className="category-title">{group.category}</div>
+            <ul className="dish-list">
+              {(group.dishIds || []).map(dish => (
+                <li key={dish._id} className="dish-selected">{dish.name}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
 
-      {(quote.selectedAddOns || []).length > 0 && (
-        <div className="quote-addons">
-          <div className="category-title">Add-Ons</div>
-          <ul>
-            {quote.selectedAddOns.map((add, i) => {
-              const subtotal = calculateAddOnSubtotal(add.dishId, add.unit);
-              return (
-                <li key={i}>
-                  ➕ {add.dishId?.name} — ₹{add.dishId?.price} ({add.unit}) = ₹{subtotal}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+        {(quote.selectedAddOns || []).length > 0 && (
+          <div className="quote-addons">
+            <div className="category-title">Add-Ons</div>
+            <ul>
+              {quote.selectedAddOns.map((add, i) => {
+                const subtotal = calculateAddOnSubtotal(add.dishId, add.unit);
+                return (
+                  <li key={i}>
+                    ➕ {add.dishId?.name} — ₹{add.dishId?.price} ({add.unit}) = ₹{subtotal}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
 
-      <div className="quote-total">
+        {(quote.additionalRequests || []).length > 0 && (
+          <div className="quote-extra">
+            <div>🍽 Additional Requests:</div>
+            <ul>
+              {quote.additionalRequests.map((req, i) => (
+                <li key={i}>📝 {req}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="quote-custom-input">
+          <h4>Add Custom Dish</h4>
+          <input
+            type="text"
+            placeholder="Dish Name"
+            value={newDish.name}
+            onChange={e => setNewDish({ ...newDish, name: e.target.value })}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            value={newDish.price}
+            onChange={e => setNewDish({ ...newDish, price: e.target.value })}
+          />
+          <select
+            value={newDish.unit}
+            onChange={e => setNewDish({ ...newDish, unit: e.target.value })}
+          >
+            <option value="per guest">Per Guest</option>
+            <option value="fixed">Fixed</option>
+          </select>
+          <button onClick={handleAddCustomDish}>Add</button>
+        </div>
+      </div>
+
+      <div className="downquote-details">
         <strong>TOTAL :</strong> ₹{total}
-      </div>
-
-      {(quote.additionalRequests || []).length > 0 && (
-        <div className="quote-extra">
-          <div>🍽 Additional Requests:</div>
-          <ul>
-            {quote.additionalRequests.map((req, i) => (
-              <li key={i}>📝 {req}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <div className="quote-custom-input">
-        <h4>Add Custom Dish</h4>
-        <input
-          type="text"
-          placeholder="Dish Name"
-          value={newDish.name}
-          onChange={e => setNewDish({ ...newDish, name: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={newDish.price}
-          onChange={e => setNewDish({ ...newDish, price: e.target.value })}
-        />
-        <select
-          value={newDish.unit}
-          onChange={e => setNewDish({ ...newDish, unit: e.target.value })}
-        >
-          <option value="per guest">Per Guest</option>
-          <option value="fixed">Fixed</option>
-        </select>
-        <button onClick={handleAddCustomDish}>Add</button>
       </div>
     </div>
   );
