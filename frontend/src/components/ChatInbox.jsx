@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
 import { useSelectedLead } from '../context/SelectedLeadContext';
+import { API } from '../utils/api';
 
 const ChatInbox = () => {
   const [leads, setLeads] = useState([]);
@@ -14,7 +14,7 @@ const ChatInbox = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/leads');
+        const res = await API.get('/leads');
         setLeads(res.data);
       } catch (err) {
         console.error('Failed to fetch leads:', err);

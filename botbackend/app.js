@@ -62,5 +62,39 @@ app.get('/', (req, res) => {
     res.send('Treat Caterers WhatsApp Bot is running 🚀');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
+// ✅ Health check endpoint for Render
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        service: 'Catering Bot Backend',
+        port: process.env.PORT || 10000
+    });
+});
+
+const PORT = process.env.PORT || 10000;
+const HOST = '0.0.0.0';
+
+const server = app.listen(PORT, HOST, () => {
+    console.log(`🚀 Server running on ${HOST}:${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Render deployment ready!`);
+});
+
+// Handle server errors
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.log(`❌ Port ${PORT} is already in use`);
+        process.exit(1);
+    } else {
+        console.log('❌ Server error:', err);
+    }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('👋 SIGTERM received, shutting down gracefully');
+    server.close(() => {
+        console.log('✅ Process terminated');
+    });
+});

@@ -107,3 +107,30 @@
     opacity: 1;
   }
 }
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  .modal-box {
+    width: 95%;
+    max-width: none;
+    margin: 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .event-form input,
+  .event-form select {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 12px;
+  }
+
+  .event-form button[type="submit"] {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .close-btn {
+    font-size: 20px;
+    padding: 5px;
+  }
+}

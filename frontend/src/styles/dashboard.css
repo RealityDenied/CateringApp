@@ -3,8 +3,6 @@
   box-sizing: border-box;
 }
 
-
-
 body, html {
   margin: 0;
   padding: 0;
@@ -18,7 +16,25 @@ body, html {
   gap: 16px;
   padding: 10px 20px;
   overflow: hidden; /* Prevent vertical overflow from children */
-  
+}
+
+/* === DESKTOP LAYOUT (Default) === */
+.desktop-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 16px;
+}
+
+/* === MOBILE LAYOUT (Hidden by default) === */
+.mobile-layout {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  padding: 0;
+  margin: 0;
 }
 
 
@@ -430,4 +446,194 @@ body, html {
 
 
 /* === from here chat window real chat messages === */
+
+/* === MOBILE RESPONSIVE STYLES === */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 0;
+    gap: 0;
+  }
+
+  /* Hide desktop layout on mobile */
+  .desktop-layout {
+    display: none;
+  }
+
+  /* Show mobile layout on mobile */
+  .mobile-layout {
+    display: flex;
+  }
+
+  /* Mobile content container */
+  .mobile-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-x; /* Enable horizontal swiping */
+  }
+
+  /* Horizontal scroll container */
+  .mobile-sections {
+    display: flex;
+    width: 300%; /* 3 sections * 100% */
+    height: 100%;
+    transition: transform 0.3s ease-in-out;
+    touch-action: pan-x; /* Enable horizontal swiping */
+  }
+
+  /* Individual mobile sections */
+  .mobile-section {
+    width: 33.333%; /* 100% / 3 sections */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+  }
+
+  /* No quote state */
+  .no-quote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+
+  .no-quote p:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .no-quote p:last-child {
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  /* Mobile bottom navigation */
+  .mobile-navbar {
+    display: flex;
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+    padding: 8px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-navbar button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-navbar button span:first-child {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  .mobile-navbar button.active {
+    color: #1BAA96;
+    font-weight: 600;
+  }
+
+  .mobile-navbar button:hover {
+    background-color: #f5f5f5;
+  }
+
+  /* Calendar modal for mobile */
+  .calendar-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+
+  .calendar-modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .calendar-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  /* Make mobile sections properly fill the screen */
+  .mobile-section .inbox-inside,
+  .mobile-section .chatbox,
+  .mobile-section .quote-bubble {
+    height: 100%;
+  }
+
+  /* Adjust chat window for mobile */
+  .mobile-section .chat-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Ensure quote bubble fills mobile section */
+  .mobile-section .quote-bubble {
+    margin: 0;
+    border-radius: 0;
+    flex: 1;
+  }
+
+  /* Chat interface only (no quote bubble) */
+  .chat-interface-only {
+    width: 100% !important;
+  }
+
+  /* No lead selected state */
+  .no-lead-selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+/* === Keep desktop layout unchanged for larger screens === */
+@media (min-width: 769px) {
+  .mobile-layout {
+    display: none !important;
+  }
+  
+  .desktop-layout {
+    display: flex !important;
+  }
+}
 
