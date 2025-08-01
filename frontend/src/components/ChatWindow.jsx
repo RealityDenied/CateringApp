@@ -87,74 +87,71 @@ useEffect(() => {
   };
 
   return (
-        <div className="chat-box">
-  <ChatProfile />
+    <div className="chat-box">
+      <ChatProfile />
 
-  <div className="chat-body">
-    <div className="chat-left">
-      {quote ? (
-          <QuoteBubble quote={quote} lead={selectedLead} />
-        ) : (
-          <div className="no-quote-box">
-            <p>No quote available for this lead.</p>
-            <button
-              onClick={async () => {
-                try {
-                  const configRes = await API.get('/config');
-                  const clientUrl = configRes.data.CLIENT_URL;
-                  const url = `${clientUrl}/quote-editor/${selectedLead?.sessionToken}`;
-                  navigator.clipboard.writeText(url);
-                  alert('📋 Quote session link copied to clipboard!');
-                } catch (error) {
-                  console.error('Error fetching config:', error);
-                  // Fallback to original behavior
-                  const url = `${window.location.origin}/quote-editor/${selectedLead?.sessionToken}`;
-                  navigator.clipboard.writeText(url);
-                  alert('📋 Quote session link copied to clipboard!');
-                }
-              }}
-            >
-              Copy Quote Session
-            </button>
+      <div className="chat-body">
+        <div className="chat-left">
+          {quote ? (
+            <QuoteBubble quote={quote} lead={selectedLead} />
+          ) : (
+            <div className="no-quote-box">
+              <p>No quote available for this lead.</p>
+              <button
+                onClick={async () => {
+                  try {
+                    const configRes = await API.get('/config');
+                    const clientUrl = configRes.data.CLIENT_URL;
+                    const url = `${clientUrl}/quote-editor/${selectedLead?.sessionToken}`;
+                    navigator.clipboard.writeText(url);
+                    alert('📋 Quote session link copied to clipboard!');
+                  } catch (error) {
+                    console.error('Error fetching config:', error);
+                    // Fallback to original behavior
+                    const url = `${window.location.origin}/quote-editor/${selectedLead?.sessionToken}`;
+                    navigator.clipboard.writeText(url);
+                    alert('📋 Quote session link copied to clipboard!');
+                  }
+                }}
+              >
+                Copy Quote Session
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="chat-right">
+          <div className="message-thread">
+            {messages.map((msg, i) => (
+              <div key={i} className={`chat-bubble ${msg.sender === 'chef' ? 'right' : 'left'}`}>
+                {msg.text}
+              </div>
+            ))}
           </div>
-        )}
 
-    </div>
-
-    <div className="chat-right">
-      <div className="message-thread">
-        {messages.map((msg, i) => (
-          <div key={i} className={`chat-bubble ${msg.sender === 'chef' ? 'right' : 'left'}`}>
-            {msg.text}
+          <div className="chat-input">
+            <input
+              value={inputMessage}
+              onChange={e => setInputMessage(e.target.value)}
+              placeholder="Type your message…"
+              onKeyPress={e => e.key === 'Enter' && handleSend()}
+            />
+            <button onClick={handleSend}>Send</button>
+            {!isOnline && (
+              <span style={{ 
+                fontSize: '12px', 
+                color: '#ff6b6b', 
+                marginLeft: '10px',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                ⚠️ Offline
+              </span>
+            )}
           </div>
-        ))}
-      </div>
-
-      <div className="chat-input">
-        <input
-          value={inputMessage}
-          onChange={e => setInputMessage(e.target.value)}
-          placeholder="Type your message…"
-          onKeyPress={e => e.key === 'Enter' && handleSend()}
-        />
-        <button onClick={handleSend}>Send</button>
-        {!isOnline && (
-          <span style={{ 
-            fontSize: '12px', 
-            color: '#ff6b6b', 
-            marginLeft: '10px',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            ⚠️ Offline
-          </span>
-        )}
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-
   );
 }
 
