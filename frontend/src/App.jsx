@@ -11,6 +11,7 @@ function App() {
     <BrowserRouter>
       <SelectedLeadProvider>
         <Routes>
+          <Route path="/" element={<Dashboard />} />
           <Route path="/dish" element={<DishManager />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
