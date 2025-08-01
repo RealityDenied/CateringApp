@@ -75,19 +75,38 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 10000;
 const HOST = '0.0.0.0';
 
-const server = app.listen(PORT, HOST, () => {
-    console.log(`🚀 Server running on ${HOST}:${PORT}`);
+// Debug logging to see what PORT value we're getting
+console.log('🔍 Debug Info:');
+console.log('process.env.PORT:', process.env.PORT);
+console.log('Parsed PORT:', PORT);
+console.log('Type of PORT:', typeof PORT);
+
+// Ensure PORT is a number, not a string URL
+const FINAL_PORT = parseInt(PORT) || 10000;
+console.log('Final PORT (as number):', FINAL_PORT);
+
+const server = app.listen(FINAL_PORT, HOST, () => {
+    console.log(`🚀 Server running on ${HOST}:${FINAL_PORT}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🌐 Render deployment ready!`);
 });
 
 // Handle server errors
 server.on('error', (err) => {
+    console.log('❌ Server error details:', err);
+    console.log('Error code:', err.code);
+    console.log('Error message:', err.message);
+    
     if (err.code === 'EADDRINUSE') {
-        console.log(`❌ Port ${PORT} is already in use`);
+        console.log(`❌ Port ${FINAL_PORT} is already in use`);
+        process.exit(1);
+    } else if (err.code === 'EACCES') {
+        console.log(`❌ Permission denied - Check if PORT is valid: ${FINAL_PORT}`);
+        console.log('Make sure PORT is a number, not a URL!');
         process.exit(1);
     } else {
         console.log('❌ Server error:', err);
+        process.exit(1);
     }
 });
 
