@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { API } from '../utils/api';
 import '../styles/addEventModal.css'; 
 
 function AddEventModal({ onClose, onEventCreated }) {
@@ -26,21 +26,15 @@ function AddEventModal({ onClose, onEventCreated }) {
     setError(null);
     try {
       const fullDate = new Date(`${formData.eventDate}T${formData.eventTime}`);
-      const res = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, eventDate: fullDate })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setQuoteLink(data.quoteLink);
-        if (onEventCreated) onEventCreated();
-      } else {
-        setError(data.error || 'Failed to create event.');
-      }
+      const res = await API.post('/leads', { ...formData, eventDate: fullDate });
+      const data = res.data;
+      
+      setQuoteLink(data.quoteLink);
+      if (onEventCreated) onEventCreated();
     } catch (err) {
-      console.error(err);
-      setError('Something went wrong.');
+      console.error('Error creating event:', err);
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to create event.';
+      setError(errorMessage);
     }
   };
 
