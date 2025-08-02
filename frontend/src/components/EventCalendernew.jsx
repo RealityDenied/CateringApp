@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/calender.css';
 import AddEventModal from './AddEventModel';
+import { API } from '../utils/api';
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [
@@ -31,9 +32,13 @@ function EventCalendar() {
   }, []);
 
   const fetchEvents = async () => {
-    const res = await fetch('/api/leads');
-    const data = await res.json();
-    setEvents(data);
+    try {
+      const res = await API.get('/leads');
+      setEvents(res.data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      setEvents([]);
+    }
   };
 
   const handlePrevMonth = () => {
