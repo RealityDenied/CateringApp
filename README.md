@@ -1,4 +1,4 @@
-# 🍽️ Treat Caterers - Catering Management App
+# 🍽️ Catering Management App
 
 A MERN stack application designed for local caterers to manage leads, menus, and quotations — with WhatsApp bot integration for event-based automation.
 
