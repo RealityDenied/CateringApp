@@ -86,9 +86,16 @@ const CategoryViewer = ({ onCategoryDragStart }) => {
             return (
               <div
                 key={cat._id}
-                className="category-block"
-                draggable
-                onDragStart={() => onCategoryDragStart(cat.name)}
+                className={`category-block ${isFlexible ? 'flexible-category' : ''}`}
+                draggable={!isFlexible}
+                onDragStart={() => {
+                  if (isFlexible) {
+                    alert('❌ Flexible categories (Add-ons) cannot be added to tiers. They are automatically available as add-ons.');
+                    return false;
+                  }
+                  onCategoryDragStart(cat.name);
+                }}
+                title={isFlexible ? 'Add-ons categories are automatically available for all tiers' : 'Drag to add to a tier'}
               >
                 <h3>
                   {cat.name}

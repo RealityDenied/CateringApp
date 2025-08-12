@@ -77,7 +77,8 @@ router.post('/', async (req, res) => {
       eventDate: new Date(eventDate),
       numberOfGuests,
       location,
-      sessionToken
+      sessionToken,
+      source: 'manual' // Mark as manually created
     });
 
     await lead.save();

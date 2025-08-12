@@ -13,8 +13,21 @@ function ChatWindow() {
   const [lastMessageTime, setLastMessageTime] = useState(null);
   const [isOnline, setIsOnline] = useState(true);
 
+  // Check if no lead is selected
+  const noLeadSelected = !selectedLead;
+  
+  // Check if chat is enabled (only for WhatsApp bot users)
+  const isChatEnabled = selectedLead?.source === 'whatsapp';
+  
+  // Determine if we should show messages
+  const shouldShowMessages = selectedLead && isChatEnabled;
+
   useEffect(() => {
-    if (!selectedLead?._id) return;
+    if (!shouldShowMessages) {
+      setMessages([]);
+      setLastMessageTime(null);
+      return;
+    }
 
     const fetchMessages = async () => {
       try {
@@ -52,7 +65,7 @@ function ChatWindow() {
 
     // Cleanup interval on unmount or when selectedLead changes
     return () => clearInterval(pollInterval);
-  }, [selectedLead, lastMessageTime, messages.length]);
+  }, [shouldShowMessages, selectedLead, lastMessageTime, messages.length]);
 
   //  New useEffect for scrolling to bottom when messages update
 useEffect(() => {
@@ -62,7 +75,7 @@ useEffect(() => {
 
 
   const handleSend = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || !isChatEnabled) return;
 
     const payload = {
       leadId: selectedLead._id,
@@ -92,7 +105,11 @@ useEffect(() => {
 
       <div className="chat-body">
         <div className="chat-left">
-          {quote ? (
+          {noLeadSelected ? (
+            <div className="no-quote-box">
+              <p>Select a chat to begin</p>
+            </div>
+          ) : quote ? (
             <QuoteBubble quote={quote} lead={selectedLead} />
           ) : (
             <div className="no-quote-box">
@@ -121,34 +138,53 @@ useEffect(() => {
         </div>
 
         <div className="chat-right">
-          <div className="message-thread">
-            {messages.map((msg, i) => (
-              <div key={i} className={`chat-bubble ${msg.sender === 'chef' ? 'right' : 'left'}`}>
-                {msg.text}
+          {noLeadSelected ? (
+            <div className="chat-disabled-state">
+              <div className="disabled-icon">💬</div>
+              <h3>Select a chat to begin</h3>
+              <p>Choose a lead from the sidebar to start viewing their conversation.</p>
+            </div>
+          ) : !isChatEnabled ? (
+            <div className="chat-disabled-state">
+              <div className="disabled-icon">🚫</div>
+              <h3>Chats are enabled only for WhatsApp bot users</h3>
+              <p>This lead was created manually and doesn't have chat functionality.</p>
+            </div>
+          ) : (
+            <>
+              <div className="message-thread">
+                {messages.map((msg, i) => (
+                  <div key={i} className={`chat-bubble ${msg.sender === 'chef' ? 'right' : 'left'}`}>
+                    {msg.text}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="chat-input">
-            <input
-              value={inputMessage}
-              onChange={e => setInputMessage(e.target.value)}
-              placeholder="Type your message…"
-              onKeyPress={e => e.key === 'Enter' && handleSend()}
-            />
-            <button onClick={handleSend}>Send</button>
-            {!isOnline && (
-              <span style={{ 
-                fontSize: '12px', 
-                color: '#ff6b6b', 
-                marginLeft: '10px',
-                display: 'flex',
-                alignItems: 'center'
-              }}>
-                ⚠️ Offline
-              </span>
-            )}
-          </div>
+              <div className="chat-input">
+                <input
+                  value={inputMessage}
+                  onChange={e => setInputMessage(e.target.value)}
+                  placeholder="Type your message…"
+                  onKeyPress={e => e.key === 'Enter' && handleSend()}
+                  disabled={!isChatEnabled}
+                />
+                <button onClick={handleSend} disabled={!isChatEnabled}>
+                  Send
+                </button>
+                {!isOnline && (
+                  <span style={{ 
+                    fontSize: '12px', 
+                    color: '#ff6b6b', 
+                    marginLeft: '10px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    ⚠️ Offline
+                  </span>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

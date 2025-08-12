@@ -13,6 +13,7 @@ const leadSchema = new mongoose.Schema({
     quote: { type: mongoose.Schema.Types.ObjectId, ref: 'QuoteNew' },
 
     sessionToken: { type: String, unique: true }, // New field
+    source: { type: String, enum: ['whatsapp', 'manual'], default: 'manual' }, // Track creation source
 
     createdAt: { type: Date, default: Date.now }
 });

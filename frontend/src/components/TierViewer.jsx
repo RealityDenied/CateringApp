@@ -29,14 +29,21 @@ const TierViewer = ({ draggedCategory }) => {
   };
 
   const handleDrop = async (tierId, category) => {
+    if (!category) return;
+    
+    // Check if the category is flexible (Add-ons should not be added to tiers)
+    const catRes = await API.get('/categories');
+    const categoryObj = catRes.data.find(c => c.name === category);
+    
+    if (categoryObj?.isFlexible) {
+      alert('❌ Flexible categories (Add-ons) cannot be added to tiers. They are automatically available as add-ons for all tiers.');
+      return;
+    }
+
     const dishRes = await API.get('/dishes');
     const matchingDishes = dishRes.data.filter(d => d.category === category);
-    const catRes = await API.get('/categories');
-    const isFlexible = catRes.data.find(c => c.name === category)?.isFlexible;
 
-    const maxSelectable = isFlexible
-      ? null
-      : parseInt(prompt(`How many dishes can be selected from "${category}"?`)) || matchingDishes.length;
+    const maxSelectable = parseInt(prompt(`How many dishes can be selected from "${category}"?`)) || matchingDishes.length;
 
     await API.put(`/tiers/${tierId}/categories`, {
       category,

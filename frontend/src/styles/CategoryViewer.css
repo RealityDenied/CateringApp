@@ -175,6 +175,22 @@
   background: linear-gradient(90deg, #1BAA96, #15918a);
 }
 
+/* Flexible category styling */
+.category-block.flexible-category {
+  border-color: #8b5cf6;
+  cursor: not-allowed;
+}
+
+.category-block.flexible-category::before {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+.category-block.flexible-category:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+  cursor: not-allowed;
+}
+
 .category-block h3 {
   font-size: 1rem;
   font-weight: 600;

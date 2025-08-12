@@ -88,7 +88,8 @@ router.post('/', async (req, res) => {
         eventDate: eventDateUTC,
         numberOfGuests: Number(data['number of guests']),
         location: data['location'],
-        sessionToken
+        sessionToken,
+        source: 'whatsapp' // Mark as WhatsApp bot created
       });
 
       await newLead.save();

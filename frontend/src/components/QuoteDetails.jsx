@@ -82,16 +82,23 @@ const QuoteDetails = ({ quote, lead }) => {
       </div>
 
       <div className="midquote-details">
-        {(quote.selectedDishes || []).map((group, idx) => (
-          <div key={idx} className="quote-category">
-            <div className="category-title">{group.category}</div>
-            <ul className="dish-list">
-              {(group.dishIds || []).map(dish => (
-                <li key={dish._id} className="dish-selected">{dish.name}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {(quote.selectedDishes || [])
+          .filter(group => {
+            // Filter out flexible categories from main display
+            // Flexible categories should only appear in Add-Ons section
+            const tierCategory = tier?.categories?.find(cat => cat.category === group.category);
+            return tierCategory && tierCategory.maxSelectable; // Only show non-flexible categories
+          })
+          .map((group, idx) => (
+            <div key={idx} className="quote-category">
+              <div className="category-title">{group.category}</div>
+              <ul className="dish-list">
+                {(group.dishIds || []).map(dish => (
+                  <li key={dish._id} className="dish-selected">{dish.name}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
         {(quote.selectedAddOns || []).length > 0 && (
           <div className="quote-addons">
